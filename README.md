@@ -1,10 +1,10 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. One of the experiments went like this. They gave a few AI agents a working program and asked them to make it faster. The program follows paths through a tree of numbers. You can change how it does the calculation as long as you get the same answers. They measured how long it took in cycles, basically ticks on a simulated computer. Fewer is better. [Their write-up](https://rsi-top.github.io/) · [The original puzzle](https://github.com/anthropics/original_performance_takehome)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. One of the experiments was where they gave a few AI agents a working program and asked them to make it faster. The program follows paths through a tree of numbers. You can change how it does the calculation as long as you get the same answers. They measured how long it took in cycles. [Their write-up](https://rsi-top.github.io/) · [The original puzzle](https://github.com/anthropics/original_performance_takehome)
 
-What I liked was how they tested what to do when the agents got stuck. They took one search at the point where it stopped improving and let it continue two ways. In one, the agents kept trying as usual. In the other, four planner agents looked back at what had already been tried and suggested different things to try next. In the run they show, ordinary search finished at **1,244 cycles**. The version with the planners got to **1,109**. [Their results and code](https://github.com/RSI-top/rsi-top-wrapper)
+Thought it was interesting how they tested what to do when the agents got stuck. They took one search at the point where it stopped improving and let it continue two ways. In one, the agents kept trying as usual. In the other, four planner agents looked back at what had already been tried and suggested different things to try next. In the run they show, ordinary search finished at **1,244 cycles**. The version with the planners got to **1,109**. [Their results and code](https://github.com/RSI-top/rsi-top-wrapper)
 
-That got me interested in the attempts that gave the wrong answer. What if an agent broke the program but also figured out a faster way to do one part of it? Could I keep that part?
+I thought it was really cool but was curious as to whether the . What if an agent broke the program but also figured out a faster way to do one part of it? Could I keep that part?
 
 ## What I tried
 
