@@ -6,16 +6,11 @@ That got me wondering about the attempts that gave a wrong answer. An agent migh
 
 ## What I tried
 
-I gave the agents [Anthropic’s working program](https://github.com/anthropics/original_performance_takehome) to speed up and saved [eight of their attempts](data/README.md) that gave wrong answers. I wrote a Python tool to look through those attempts for edits I could reuse.
-
-Two attempts had the same shortcut. My tool verified that it did the same calculation as the original code, then used it to build a faster version of the working program. To measure the difference, I timed the best program the tool could build with and without access to the eight attempts.
-
-| What I gave the tool | Time for the whole program |
-| --- | ---: |
-| The working program alone | 1,981 cycles |
-| The working program and the eight wrong attempts | 1,269 cycles |
-
-The 1,269-cycle program passed all nine tests. To check whether that one edit explained the difference, I gave the tool just the working program and the shortcut by hand. It built the exact same program.
+1. I gave the RSI-top agents a program that already worked and asked them to speed it up. I kept eight versions that ran but gave wrong answers. [The original program](https://github.com/anthropics/original_performance_takehome) · [The eight attempts](data/README.md)
+2. After the agents finished, I ran my Python tool on the original program alone. It tried 90 ways to arrange the instructions. The fastest program it built took **1,981 cycles**.
+3. I ran the tool again, this time letting it look through the eight attempts for shorter ways to do individual calculations. Workers 11 and 12 had each used one instruction where the original used two. The tool verified that their shortcut gave the same result for that calculation.
+4. The tool used the shortcut to rebuild the working program and tried the same 90 settings. This time the whole program took **1,269 cycles** and passed all nine benchmark tests.
+5. I wanted to know whether that one shortcut explained the difference. I took the eight attempts away and gave the tool just the original program and the shortcut by hand. It built the exact same 1,269-cycle program.
 
 <details>
 <summary>What was the shortcut?</summary>
