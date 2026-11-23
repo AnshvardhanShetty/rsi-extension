@@ -1,4 +1,4 @@
-"""Replay failed workers on the frozen kernel benchmark. All model outputs are on disk."""
+"""Look for useful shortcuts in saved programs that ran but returned wrong answers."""
 
 import argparse
 from functools import partial
@@ -128,35 +128,46 @@ def main():
     )
     expected_workers = 8 if args.seed == 52 else 4
     if len(workers) != expected_workers:
-        raise ValueError(f"Expected {expected_workers} failed workers in {folder}")
+        raise ValueError(
+            f"Expected {expected_workers} programs that returned wrong answers in {folder}"
+        )
 
     if args.seed == 52:
         cases = [
-            ("baseline", [], False),
-            ("failed workers", workers, False),
-            ("known rule", [], True),
+            ("baseline", "baseline", [], False),
+            (
+                "failed_workers",
+                "with code from programs that gave wrong answers",
+                workers,
+                False,
+            ),
+            ("known_rule", "known rule", [], True),
         ]
         first_tree = 410032
     else:
         cases = [
-            ("known rule", [], True),
-            ("known rule + failed workers", workers, True),
+            ("known_rule", "known rule", [], True),
+            (
+                "known_rule_and_failed_workers",
+                "known rule + code from programs that gave wrong answers",
+                workers,
+                True,
+            ),
         ]
         first_tree = 542001
 
     # Save the winning programs so the original submission tests can run them as well.
     output_folder = Path("output") / f"seed{args.seed}"
     output_folder.mkdir(parents=True, exist_ok=True)
-    for name, donors, add_rule in cases:
+    for filename, label, donors, add_rule in cases:
         graph, root, expressions = collect_expressions(
             simulator, folder, donors, add_rule
         )
         program = find_fastest_schedule(graph, root, expressions)
         verify_program(simulator, program, first_tree)
-        filename = name.replace(" + ", "_and_").replace(" ", "_") + ".json.gz"
-        with gzip.open(output_folder / filename, "wt") as stream:
+        with gzip.open(output_folder / f"{filename}.json.gz", "wt") as stream:
             json.dump(program, stream, sort_keys=True)
-        print(f"{name:30s} {len(program):5d} cycles   8 trees passed", flush=True)
+        print(f"{label:55s} {len(program):5d} cycles   8 trees passed", flush=True)
 
 
 if __name__ == "__main__":

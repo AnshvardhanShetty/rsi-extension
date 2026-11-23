@@ -4,17 +4,17 @@ I read the RSI-top write-up from Azalia Mirhoseini’s group. One of the experim
 
 Thought it was interesting how they tested what to do when the agents got stuck. They took one search at the point where it stopped improving and let it continue two ways. In one, the agents kept trying as usual. In the other, four planner agents looked back at what had already been tried and suggested different things to try next. In the run they show, ordinary search finished at **1,244 cycles**. The version with the planners got to **1,109**. [Their results and code](https://github.com/RSI-top/rsi-top-wrapper)
 
-I thought it was really cool but was curious as to whether the . What if an agent broke the program but also figured out a faster way to do one part of it? Could I keep that part?
+The compiler idea came from another paper I read from the group, [AI as a Compiler](https://arxiv.org/abs/2609.36800). They gave a model code written in Triton and asked it to write the instructions an NVIDIA GPU would run. On some tasks the model found a faster way to do the calculation than Triton’s own compiler did.
+
+That made me wonder about the RSI-top runs. Say an agent changes two things. One change saves a few instructions, the other introduces a bug, and the program runs but gives the wrong answer. Could a compiler pick out the part worth keeping? That’s what I wanted to try.
 
 ## What I tried
 
-I ran my own search on the same puzzle and saved the programs. Afterward I wrote a small compiler in Python. It looks for pieces of a failed program that could replace a step in the working one. It checks that the two pieces give the same answer, then tries building the working program with the replacement.
+I ran my own search on the same puzzle and saved the programs. Afterward I wrote a small compiler in Python. I gave it a known working program and eight versions written by agents. All eight ran, but each returned a wrong value on at least one test. The compiler looked inside them for a shorter way to do a step in the working program. Before using a shortcut, it checked that the two ways of doing that step gave the same value.
 
-In one run, a failed agent had written a simpler way to pick between two values. The working code asked “is this number zero?” and then picked A or B. The agent tested the number directly and swapped A and B. That saved a comparison and let my compiler load some tree values ahead of time. My compiler got **1,981 cycles** on its own and **1,269** with the failed attempts. I gave it just that one shortcut by hand and got the exact same program. It passed all nine original tests. [The shortcut](results/zero_test.smt2)
+One of those eight programs had a simpler way to pick between two values. The working code asked “is this number zero?” and then picked A or B. The agent tested the number directly and swapped A and B. That saved a comparison and let my compiler load some tree values ahead of time. Starting with the working program alone, my compiler built a version that took **1,981 cycles**. When it could also use code from those eight programs, it built one that took **1,269**. I gave it just that one shortcut by hand and got the exact same program. It passed all nine original tests. [The shortcut](results/zero_test.smt2)
 
-I tried a fresh run to see if I could find a second trick and give it to the next agent. Four programs got wrong answers. I tried pulling out their edits, but none made a working program faster. So the part I’ve seen work is recovering a shortcut after a run. I’m still curious whether it can help another agent *during* a run. [The edits I tried](results/seed54_edits.json)
-
-There’s a related paper from the group called *AI as a Compiler*. They gave a model a program written in Triton and asked it to write the low-level instructions for an NVIDIA GPU. The connection for me is who comes up with a better set of instructions. In their paper the model writes them directly. Here the model came up with one useful shortcut inside a broken program, and my Python compiler checked it and built the final program for the simulator. [AI as a Compiler](https://arxiv.org/abs/2609.36800)
+I tried a fresh run to see if I could find a second trick and give it to the next agent. Four of the new programs ran and returned wrong answers. I tried pulling out their edits, but none made a working program faster. So the part I’ve seen work is recovering a shortcut after a run. I’m still curious whether it can help another agent *during* a run. [The edits I tried](results/seed54_edits.json)
 
 ## Try it
 
