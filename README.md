@@ -24,10 +24,6 @@ The program needed to choose A for zero and B for any other number. The original
 
 </details>
 
-## Further directions
-
-I’d like to try this during a search. When my tool recovers a shortcut, I’d give the faster working program to the next agent. With the same number of attempts left, can it finish with a faster program than RSI-top would find on its own?
-
 ## Try it
 
 You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). These commands use the saved attempts, so you can run them without an API key.
@@ -50,5 +46,9 @@ git -C benchmark diff HEAD -- tests/ problem.py
 ```
 
 You should see nine tests pass and an empty diff for the tests and simulator.
+
+## Further directions
+
+If I give the next RSI-top agent a working program with the shortcut already in it, can it beat ordinary RSI-top with the same number of attempts left?
 
 Anshvardhan Shetty · Independent project, built with AI assistance.
