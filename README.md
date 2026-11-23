@@ -8,9 +8,11 @@ Could I take just those two instructions, put them in the working program, and s
 
 ## What I tried
 
-I ran my own search on the same puzzle and saved eight programs that ran but gave wrong answers. After the run, I wrote a compiler in Python to look for shortcuts in those programs. It ran the calculations on a few sample inputs to find possible matches, then used Z3 to check that a shortcut held for every 32-bit input to that step. [The puzzle](https://github.com/anthropics/original_performance_takehome)
+I gave RSI-top the same puzzle and kept eight attempts that got the answer wrong. Then I wrote a Python tool to compare each attempt with the working program, one calculation at a time. If two calculations gave the same answer on a few examples, the tool asked Z3 a follow-up question. Could *any* input make these two calculations disagree? If Z3 proved they always agreed, the tool could use the agent’s calculation in the working program. [The puzzle](https://github.com/anthropics/original_performance_takehome)
 
-One agent had found a shorter way to choose between two values. The original checked whether a number was zero and then picked A or B. The agent used the number itself and flipped the order of A and B. Same choice either way. That little change also let my compiler load some values ahead of time. With just the working code it got 1,981 cycles. With the eight programs to look through it got 1,269 and passed all nine tests. I tried adding just the A/B trick by hand and got the exact same program back. [The shortcut](results/zero_test.smt2)
+Here’s one shortcut it found. The working program needed to pick A when a number was zero and B otherwise. It used one instruction to ask “is this zero?” and another to pick A or B. One agent spotted that the machine’s pick instruction already treats zero as false. It fed the number straight into that instruction, with B as the choice for nonzero and A as the choice for zero. Same answer, one less instruction. [The check for this shortcut](results/zero_test.smt2)
+
+Did that help the whole program? I gave my tool the same 90 tries to arrange the instructions each time. With only the working program to draw from, its best version took **1,981 cycles**. When it could also borrow from the eight wrong attempts, it found a version that took **1,269 cycles** and passed all nine tests. The shortcut also let the tool move some loads earlier, so the gain was bigger than just skipping a single check. To see how much the shortcut explained, I ran the tool once more with just the working program and that one rule. It produced the exact same 1,269-cycle program.
 
 ## Try it
 
