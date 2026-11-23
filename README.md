@@ -4,11 +4,11 @@ I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their exper
 
 I thought the part about going back through old attempts was interesting. I wondered what the planners could learn from a program that ran and gave the wrong answer. Suppose an agent makes two edits. It figures out how to do a calculation in two instructions instead of five. A few lines later, it reads the wrong value. The final answer is wrong, so I can’t use that version as it stands. But I’d still want those first two instructions if they really did the same job as the original five.
 
-So I wanted to go back through the RSI-top attempts with a working copy of the program next to me. If I found an agent doing one calculation differently, I could check whether both versions always gave the same value *at that step*. If they did, I could use the agent’s version of that calculation, leave the rest of the working program alone, and time the result. The hope was that the next agent could start from that faster, working version instead of having to come up with the same idea again.
+Could I take just those two instructions, put them in the working program, and see if it gave the right answer faster?
 
 ## What I tried
 
-I ran my own search on the same puzzle and saved eight programs that ran but gave wrong answers. After the run, I wrote a compiler in Python to do that comparison. It ran the calculations on a few sample inputs to find possible matches, then used Z3 to check that a shortcut held for every 32-bit input to that step. [The puzzle](https://github.com/anthropics/original_performance_takehome)
+I ran my own search on the same puzzle and saved eight programs that ran but gave wrong answers. After the run, I wrote a compiler in Python to look for shortcuts in those programs. It ran the calculations on a few sample inputs to find possible matches, then used Z3 to check that a shortcut held for every 32-bit input to that step. [The puzzle](https://github.com/anthropics/original_performance_takehome)
 
 One agent had found a shorter way to choose between two values. The original checked whether a number was zero and then picked A or B. The agent used the number itself and flipped the order of A and B. Same choice either way. That little change also let my compiler load some values ahead of time. With just the working code it got 1,981 cycles. With the eight programs to look through it got 1,269 and passed all nine tests. I tried adding just the A/B trick by hand and got the exact same program back. [The shortcut](results/zero_test.smt2)
 
