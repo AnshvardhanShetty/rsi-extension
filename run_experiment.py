@@ -36,7 +36,7 @@ def read_instructions(path):
 
 
 def collect_expressions(simulator, folder, workers, known_rule):
-    """Read the correct output from the starter. Workers may supply alternative steps."""
+    """Use the starter for the correct answer and look for shortcuts in the workers' code."""
     graph = ExpressionGraph(partial(make_input, simulator))
     output, starter_nodes = graph.read_program(
         read_instructions(folder / "starter.json.gz")
@@ -56,7 +56,7 @@ def collect_expressions(simulator, folder, workers, known_rule):
 
 
 def find_fastest_schedule(graph, output, expressions):
-    """Try the same 90 settings for every row and keep the shortest program that fits."""
+    """Try 90 settings and keep the shortest program that fits in the available registers."""
     best_program = None
     for table_size in (2, 4, 8):
         root, lowered = simplify_lookups(
@@ -97,7 +97,7 @@ def verify_program(simulator, program, first_seed):
         machine = simulator.Machine(memory, program, simulator.DebugInfo({}))
         machine.enable_pause = machine.enable_debug = False
         machine.run()
-        # The reference updates memory in place and yields at pause instructions.
+        # Run past each pause so memory holds the final answer.
         for _ in simulator.reference_kernel2(memory):
             pass
         start = memory[6]
@@ -156,7 +156,7 @@ def main():
         ]
         first_tree = 542001
 
-    # Save the winning programs so the original submission tests can run them as well.
+    # Save each program for the benchmark tests.
     output_folder = Path("output") / f"seed{args.seed}"
     output_folder.mkdir(parents=True, exist_ok=True)
     for filename, label, donors, add_rule in cases:

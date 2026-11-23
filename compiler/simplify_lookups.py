@@ -1,4 +1,4 @@
-"""Replace a load from a small range of tree addresses with a choice among preloaded values."""
+"""When only a few tree values are possible, load them early and pick one later."""
 
 from .read_instructions import WORD_MASK, OPERATIONS
 
@@ -29,7 +29,7 @@ class BoundedExpressions:
         return self.add_expression("c", x & WORD_MASK)
 
     def infer_bounds(self, operation, operands):
-        """Return a range, or the ID of a simpler expression when the bounds imply one."""
+        """Return the possible range, or a simpler expression's ID if it gives the same result."""
         if operation == "c":
             return operands[0], operands[0]
         if operation in ("x", "mem"):
@@ -129,7 +129,7 @@ class BoundedExpressions:
 def simplify_lookups(
     root, recipes, table_limit, tree_start, tree_end, boolean_math=False
 ):
-    """Rebuild the output expression, preloading small power-of-two ranges of tree values."""
+    """Rewrite small tree lookups so their values can be loaded ahead of time."""
     builder = BoundedExpressions(boolean_math)
     memo = {}
 

@@ -23,7 +23,7 @@ def hex_word(value):
 
 
 class EquivalentExpressions:
-    """Matching sample values suggest a pair. A proof lets both nodes share a group."""
+    """Use sample results to find possible matches, then check them with Z3."""
 
     def __init__(self, graph):
         self.group_of_node = []
@@ -68,10 +68,7 @@ class EquivalentExpressions:
         self.prover.stdin.flush()
 
     def prove(self, candidate, previous_group):
-        """Check whether the two calculations can ever give different 32-bit results.
-
-        A solver timeout leaves this particular match unproven.
-        """
+        """Return True only if the two calculations always give the same 32-bit result."""
         def dependencies(node, depth):
             if depth == 0 or node[0] in ("c", "x"):
                 return set()
@@ -96,8 +93,7 @@ class EquivalentExpressions:
                 return variable(0)
             if operation == "c":
                 return hex_word(node[1])
-            # Stop at shared inputs or the depth limit. Both sides use the same
-            # solver variable for the same group, whatever value it might hold.
+            # Give a shared input the same name on both sides of the check.
             args = []
             for group_id in node[1:]:
                 child = self.recipes[group_id]

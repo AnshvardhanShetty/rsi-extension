@@ -1,4 +1,4 @@
-"""Suggest cheaper expressions. The proof step checks each suggestion before use."""
+"""Suggest simpler calculations for Z3 to check."""
 
 
 def arithmetic_rewrites(graph, available):

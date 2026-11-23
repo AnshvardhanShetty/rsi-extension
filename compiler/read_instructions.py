@@ -1,4 +1,4 @@
-"""Follow one input value through the instructions and record the expressions used to compute it."""
+"""Follow one input through the program and record each calculation."""
 
 import operator
 
@@ -61,7 +61,7 @@ class ExpressionGraph:
         )
 
     def operation(self, operation, *args):
-        # Put interchangeable operands in a stable order so they share a node.
+        # Store a + b and b + a as the same calculation.
         if operation in ("+", "*", "&", "|", "^", "==") and args[0] > args[1]:
             args = (args[1], args[0])
         if operation == "fma" and args[0] > args[1]:
@@ -93,11 +93,7 @@ class ExpressionGraph:
         return node_id
 
     def read_program(self, bundles):
-        """Return the first lane's output expression and the operations seen along the way.
-
-        The starter's output is the value we want to reproduce. A worker with a
-        wrong output can still contribute useful intermediate operations.
-        """
+        """Return the calculation for the first output and the steps found in the program."""
         self.program_nodes = set()
         zero = self.constant(0)
         scratch = [zero] * 1536
