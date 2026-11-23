@@ -12,9 +12,9 @@ I ran a version of their search and saved the agents’ attempts. After the run,
 
 On one run, an agent got the overall answer wrong but had a simpler way to make a decision. The working code checked whether a number was zero and then picked one of two values. The agent used the number directly and swapped the two choices. Same result, one less check. That also let my tool load some of the tree values ahead of time.
 
-My tool took **1,981 cycles** with the working code alone and **1,269 cycles** when it could use the failed attempts. The faster version passed all nine original tests. I also tried giving the tool just that one rule by hand. It built the exact same program.
+My tool took **1,981 cycles** with the working code alone and **1,269 cycles** when it could use the failed attempts. The faster version passed all nine original tests. I also tried giving the tool just that one rule by hand. It built the exact same program. [Check the shortcut](results/zero_test.smt2)
 
-I wanted to see if I could find a *different* shortcut on a fresh run and give it to the next agent. Four agents wrote programs that ran but gave wrong answers. I couldn't recover a second shortcut that made a working program faster, so I stopped before handing anything over. That's where this stands: I've seen a failed attempt help once, after the run. Whether it can help the next agent while the search is still going is the part I'd like to figure out.
+I wanted to see if I could find a *different* shortcut on a fresh run and give it to the next agent. Four agents wrote programs that ran but gave wrong answers. I couldn't recover a second shortcut that made a working program faster, so I stopped before handing anything over. That's where this stands: I've seen a failed attempt help once, after the run. Whether it can help the next agent while the search is still going is the part I'd like to figure out. [Edits I tried](results/seed54_edits.json)
 
 ## Try it
 
