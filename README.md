@@ -1,15 +1,17 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents try to speed up a working program. In one experiment, four agents looked back through earlier attempts and suggested what to try next. Continuing the search as usual got them to 1,244 cycles. With those suggestions, they got to 1,109. Fewer cycles means the program ran faster. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their experiments used a coding task from Anthropic. Anthropic gives you a working Python function that writes instructions for a simulated processor. The processor runs those instructions on a tree of numbers. The challenge is to change the function so it produces the same answers in fewer cycles. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
 
-That got me wondering about the attempts that gave a wrong answer. An agent might speed up one part of a program and break something else. Could I keep the good edit?
+The group used AI agents to edit that Python function and test each version. When progress stalled, four planner agents looked back through earlier attempts and suggested edits for the workers to try next. In the run they describe, ordinary search got to 1,244 cycles. With the planners it got to 1,109. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
+
+I wondered about the versions that failed the tests. An agent might have found a quicker way to do one calculation and made a mistake somewhere else. Could I take just the part it got right?
 
 ## What I tried
 
-1. I gave the RSI-top agents a program that already worked and asked them to speed it up. I kept eight versions that ran but gave wrong answers. [The original program](https://github.com/anthropics/original_performance_takehome) · [The eight attempts](data/README.md)
-2. After the agents finished, I wrote a compiler in Python. It takes the calculations in the working program, looks for shorter ways to do them, and puts the instructions together into a program I can run. I first gave it only the original code to see how far its built-in rules would get. The program it built took **1,981 cycles**.
-3. I ran the tool again, this time letting it look through the eight attempts for shorter ways to do individual calculations. Workers 11 and 12 had each used one instruction where the original used two. The tool verified that their shortcut gave the same result for that calculation.
-4. I gave the tool the same settings as before. With the shortcut available, it built a program that finished in **1,269 cycles** and passed all nine benchmark tests.
+1. I ran my own RSI-top search and saved the instructions from eight versions that gave wrong answers. This is where the agents’ part of the experiment ended. [The eight attempts](data/README.md)
+2. I wrote a Python compiler that reads the instructions from the working program, works out what they calculate, and writes a new set of instructions for the same job. It has a few rules of its own. For example, it can group eight inputs together so one instruction does the same arithmetic on all eight. Using only the working program, it produced a version that took **1,981 cycles**.
+3. I then let the same compiler read the eight saved attempts too. In the instructions from workers 11 and 12, it found a shorter way to do one of the calculations. It verified that the shortcut gave the same result as the original calculation.
+4. The compiler could now use that shortcut when building the working program. With the same settings as before, the program it produced took **1,269 cycles** and passed all nine benchmark tests.
 5. I wanted to know whether that one shortcut explained the difference. I took the eight attempts away and gave the tool just the original program and the shortcut by hand. It built the exact same 1,269-cycle program.
 
 <details>
