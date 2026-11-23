@@ -10,11 +10,9 @@ Could I take just those two instructions, put them in the working program, and s
 
 I ran my own copy of RSI-top on Anthropic’s performance take-home, the coding task the group used in their write-up. The starter program walks through a tree of numbers, updating a value at each step. The agents had to make it produce the same answers in fewer cycles on a simulated processor. I saved eight of their attempts that ran but gave the wrong answers. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
 
-One of those programs got the final answer wrong but had an interesting shortcut halfway through. At that point the working program had to choose between two values, A and B. It wanted A if a number was zero and B otherwise. It spent one instruction checking whether the number was zero, then another picking the value. The agent did it in one instruction. The machine could already pick between two values based on whether a number was zero, so the agent just gave it the number and put A and B in the right order.
+I wrote a Python tool to see if anything in those eight attempts was worth keeping. It found one shortcut. The working program checked whether a number was zero before choosing between two values. One agent skipped the check because the instruction that chose the value already handled zero. My tool checked that the shortcut always picked the same value as the original. [The check](results/zero_test.smt2)
 
-I found this with a Python tool I wrote. It looked for little pieces of code that gave the same answer on a few examples. Before borrowing the agent’s version, I wanted to know if it could ever pick the wrong value. I used a tool called Z3 to check that. It proved that both versions picked A for zero and B for every other number the machine could hold. That meant I could take just that one instruction and leave the rest of the agent’s attempt behind. [The check I ran](results/zero_test.smt2)
-
-Did that help the whole program? I gave my tool the same 90 tries to arrange the instructions each time. With only the working program to draw from, its best version took **1,981 cycles**. When it could also borrow from the eight wrong attempts, it found a version that took **1,269 cycles** and passed all nine tests. The shortcut also let the tool move some loads earlier, so the gain was bigger than just skipping a single check. To see how much the shortcut explained, I ran the tool once more with just the working program and that one rule. It produced the exact same 1,269-cycle program.
+Then I ran the tool with and without the eight attempts. On its own, the best it could do with the working program was **1,981 cycles**. With the attempts to learn from, it got to **1,269 cycles**, and the program passed all nine tests. I tried one last thing. I took the eight attempts away and gave the tool just the shortcut by hand. It built the exact same 1,269-cycle program.
 
 ## Try it
 
@@ -26,7 +24,7 @@ git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
 python3 run_experiment.py  # replay the seed 52 example
 ```
 
-You should see 1,981 cycles with the working code alone, 1,269 with the saved attempts, and 1,269 with the A/B shortcut added by hand. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
+You should see 1,981 cycles with the working code alone, 1,269 with the saved attempts, and 1,269 with the shortcut added by hand. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
