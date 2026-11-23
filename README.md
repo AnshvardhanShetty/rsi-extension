@@ -6,7 +6,7 @@ That got me wondering about the attempts that gave a wrong answer. An agent migh
 
 ## What I tried
 
-I ran RSI-top on the same coding task and saved eight programs that gave wrong answers. I wrote a Python tool to look through them for shorter ways to do parts of the working program. Before borrowing a piece, the tool checked that it would give the same answer as the original piece for every possible input. [Anthropic’s coding task](https://github.com/anthropics/original_performance_takehome)
+I ran RSI-top on the same coding task and saved eight programs that gave wrong answers. I wrote a Python tool to look through them for shorter ways to do parts of the working program. Before borrowing a piece, the tool checked that it would give the same answer as the original piece for every possible input. [Anthropic’s coding task](https://github.com/anthropics/original_performance_takehome) · [The eight saved attempts](data/README.md)
 
 Two of the eight programs had the same useful edit. Workers 11 and 12 had each found a way to make a choice in one instruction where the working program used two. I ran my tool twice to see how much that mattered.
 
@@ -26,7 +26,7 @@ The program needed to choose A for zero and B for any other number. The original
 
 ## Try it
 
-You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). These commands use the saved attempts, so you can run them without an API key.
+You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). From the root of this repo, run the commands below to replay the experiment on the saved attempts. You don't need an API key.
 
 ```sh
 git clone https://github.com/anthropics/original_performance_takehome.git benchmark
@@ -34,7 +34,7 @@ git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
 python3 run_experiment.py  # replay the seed 52 example
 ```
 
-You should see 1,981, 1,269, and 1,269 cycles. Each run tries the same 90 ways of arranging the instructions and checks the answers on eight fresh trees. [Experiment code](run_experiment.py)
+You should see 1,981 cycles for the working program alone, 1,269 with the eight attempts, and 1,269 with just the shortcut added by hand. Each run tries the same 90 ways of arranging the instructions and checks the answers on eight fresh trees. To follow the code, start with `collect_expressions` in [run_experiment.py](run_experiment.py). The part that checks whether two calculations agree is in [prove_equivalence.py](compiler/prove_equivalence.py).
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
@@ -49,6 +49,6 @@ You should see nine tests pass and an empty diff for the tests and simulator.
 
 ## Further directions
 
-I’d start by replaying the run up to worker 11. At that point my tool could look back at the attempts so far, recover the shortcut, and apply it to a working copy of the Python code. If that copy passes the tests and runs faster, I’d give it to the next agent as its starting point. Then I’d let RSI-top continue from the same point without my change, give both runs the same number of tries, and see where they finish.
+In a separate offline replay, I passed worker 11’s exact edit to the next attempt. It sped up the program it was applied to, but the search already had a faster one. The question I’d try next is whether I can find an edit that helps the best program the agents have so far.
 
 Anshvardhan Shetty
