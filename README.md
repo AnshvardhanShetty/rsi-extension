@@ -1,35 +1,35 @@
 # RSI extension
 
-Can a worker write a wrong program that still contains an optimization worth keeping? I tried this on the tree kernel from Anthropic’s performance take-home, using programs saved from an adaptation of RSI-top’s OpenEvolve search.
+I read the RSI-top write-up because I was curious about what happens when AI coding agents get stuck. In one of their experiments, several agents try to make the same program faster. Each agent writes a version, runs it, and gets a score. When the scores stop improving, four other agents look back through the attempts and suggest things to try next. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
 
-On seed 52, the compiler found a simpler branch in a failed worker. In pseudocode, `choose(x == 0, a, b)` gives the same answer as `choose(x, b, a)`. Removing the extra comparison let the compiler preload more of the tree. The resulting program took **1,269 simulated cycles**, down from **1,981**. Giving the compiler that rule by hand produced the same instructions. On fresh seed 54, the failed workers added no improvement.
+That got me wondering about the attempts that gave the wrong answer. A program can be broken in one place and still do something clever somewhere else. Could I take just that piece and use it in a working program?
 
-## Run the experiment
+## What I tried
 
-Use Python 3.10+ and the Z3 command-line solver (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). Run these commands from the root of this repo.
+I used the same puzzle they did. Imagine a tree with a number at every fork. The program walks through the tree, updating a running number at each fork and using that number to decide which way to go next. The goal is to get the same final numbers in fewer ticks of a simulated computer. Those ticks are the “cycles” in the results below. [Anthropic’s original challenge](https://github.com/anthropics/original_performance_takehome)
+
+I ran a version of their search and saved the agents’ attempts. After the run, I wrote a Python tool to compare pieces of the broken programs with pieces of a working one. When two pieces seemed to do the same thing, the tool checked whether they would agree for every possible input to that step. Then I tried building the working program with the shortcut.
+
+On one run, an agent got the overall answer wrong but had a simpler way to make a decision. The working code checked whether a number was zero and then picked one of two values. The agent used the number directly and swapped the two choices. Same result, one less check. That also let my tool load some of the tree values ahead of time.
+
+My tool took **1,981 cycles** with the working code alone and **1,269 cycles** when it could use the failed attempts. The faster version passed all nine original tests. I also tried giving the tool just that one rule by hand. It built the exact same program.
+
+I wanted to see if I could find a *different* shortcut on a fresh run and give it to the next agent. Four agents wrote programs that ran but gave wrong answers. I couldn't recover a second shortcut that made a working program faster, so I stopped before handing anything over. That's where this stands: I've seen a failed attempt help once, after the run. Whether it can help the next agent while the search is still going is the part I'd like to figure out.
+
+## Try it
+
+You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). These commands use the saved attempts, so you can run them without an API key.
 
 ```sh
 git clone https://github.com/anthropics/original_performance_takehome.git benchmark
 git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
-python3 run_experiment.py
-python3 run_experiment.py --seed 54
+python3 run_experiment.py            # first run (seed 52)
+python3 run_experiment.py --seed 54  # fresh run, with the old shortcut already included
 ```
 
-Each row tries the same 90 schedules and checks all 256 output values on eight fresh trees. The replay runs locally. It reads saved machine instructions and needs no model key.
+The first run should print 1,981, 1,269, and 1,269 cycles. The fresh run should print 1,269 twice. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
 
-| Run | What the compiler gets | Expected cycles |
-| --- | --- | ---: |
-| 52 | Starter and ordinary arithmetic rules | 1,981 |
-| 52 | Same inputs plus eight wrong programs | 1,269 |
-| 52 | Starter and rules, including the branch shortcut | 1,269 |
-| 54 | Starter and rules, including the branch shortcut | 1,269 |
-| 54 | Same inputs plus four wrong programs | 1,269 |
-
-The compiler traces one input lane through each program. Matching values on sample trees suggest two expressions might be interchangeable. Z3 checks that local identity over 32-bit words before the compiler can use it. Running the whole program against the reference checks the final output.
-
-## Run the original submission tests
-
-After replaying seed 52, copy the saved instructions and their small loader into the benchmark checkout created above. This replaces its example submission.
+To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
 ```sh
 cp output/seed52/failed_workers.json.gz benchmark/
@@ -38,23 +38,6 @@ python3 benchmark/tests/submission_tests.py
 git -C benchmark diff HEAD -- tests/ problem.py
 ```
 
-Expected: 1,269 cycles, nine passing tests, and an empty diff. To check the branch identity by itself, run `z3 results/zero_test.smt2`. It prints `unsat` if there is no counterexample.
+You should see nine tests pass and an empty diff for the tests and simulator.
 
-## Code
-
-| File | What it does |
-| --- | --- |
-| [run_experiment.py](run_experiment.py) | Read the workers, compile each version, and check the outputs |
-| [read_instructions.py](compiler/read_instructions.py) | Follow one value through the worker’s instructions |
-| [rewrite_rules.py](compiler/rewrite_rules.py) | List the arithmetic shortcuts the baseline already knows |
-| [prove_equivalence.py](compiler/prove_equivalence.py) | Check matching expressions and choose how to compute the output |
-| [simplify_lookups.py](compiler/simplify_lookups.py) | Replace small tree lookups with preloaded values |
-| [schedule_instructions.py](compiler/schedule_instructions.py) | Choose which operations run together in each cycle |
-
-## What happened with live workers?
-
-The 1,269-cycle program was built **after** the search. Seed 54 tested whether a useful edit could be recovered in time to give it to another worker. Ordinary search reached 2,260 verified cycles in 24 attempts. Four workers returned wrong answers. The frozen screen tried 32 edits from the two whose parents were correct. None improved its parent, so we stopped before the handoff. A later offline check tried 128 grouped edits and also found no improvement. [Edit results](results/seed54_edits.json)
-
-An earlier experiment asked a different question: does telling workers how the compiler packs their instructions help? Both branches started from the same checkpoint and got eight model replies. The feedback branch won one pair by one cycle and lost the other two. To read the scores and check the recorded verifier results, run `python3 experiments/compare_checkpoints.py`. [Paired checkpoints](results/paired_checkpoints.json)
-
-Independent, AI-assisted project by Anshvardhan Shetty. The benchmark and search harness are upstream projects. [Anthropic benchmark](https://github.com/anthropics/original_performance_takehome) · [RSI-top](https://github.com/RSI-top/rsi-top-wrapper)
+Anshvardhan Shetty · Independent project, built with AI assistance.
