@@ -1,20 +1,20 @@
 # RSI extension
 
-I read the RSI-top write-up because I was curious about what happens when AI coding agents get stuck. In one of their experiments, several agents try to make the same program faster. Each agent writes a version, runs it, and gets a score. When the scores stop improving, four other agents look back through the attempts and suggest things to try next. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. One of the experiments went like this. They gave a few AI agents a working program and asked them to make it faster. The program follows paths through a tree of numbers. You can change how it does the calculation as long as you get the same answers. They measured how long it took in cycles, basically ticks on a simulated computer. Fewer is better. [Their write-up](https://rsi-top.github.io/) · [The original puzzle](https://github.com/anthropics/original_performance_takehome)
 
-That got me wondering about the attempts that gave the wrong answer. A program can be broken in one place and still do something clever somewhere else. Could I take just that piece and use it in a working program?
+What I liked was how they tested what to do when the agents got stuck. They took one search at the point where it stopped improving and let it continue two ways. In one, the agents kept trying as usual. In the other, four planner agents looked back at what had already been tried and suggested different things to try next. In the run they show, ordinary search finished at **1,244 cycles**. The version with the planners got to **1,109**. [Their results and code](https://github.com/RSI-top/rsi-top-wrapper)
+
+That got me interested in the attempts that gave the wrong answer. What if an agent broke the program but also figured out a faster way to do one part of it? Could I keep that part?
 
 ## What I tried
 
-I used the same puzzle they did. Imagine a tree with a number at every fork. The program walks through the tree, updating a running number at each fork and using that number to decide which way to go next. The goal is to get the same final numbers in fewer ticks of a simulated computer. Those ticks are the “cycles” in the results below. [Anthropic’s original challenge](https://github.com/anthropics/original_performance_takehome)
+I ran my own search on the same puzzle and saved the programs. Afterward I wrote a small compiler in Python. It looks for pieces of a failed program that could replace a step in the working one. It checks that the two pieces give the same answer, then tries building the working program with the replacement.
 
-I ran a version of their search and saved the agents’ attempts. After the run, I wrote a Python tool to compare pieces of the broken programs with pieces of a working one. When two pieces seemed to do the same thing, the tool checked whether they would agree for every possible input to that step. Then I tried building the working program with the shortcut.
+In one run, a failed agent had written a simpler way to pick between two values. The working code asked “is this number zero?” and then picked A or B. The agent tested the number directly and swapped A and B. That saved a comparison and let my compiler load some tree values ahead of time. My compiler got **1,981 cycles** on its own and **1,269** with the failed attempts. I gave it just that one shortcut by hand and got the exact same program. It passed all nine original tests. [The shortcut](results/zero_test.smt2)
 
-On one run, an agent got the overall answer wrong but had a simpler way to make a decision. The working code checked whether a number was zero and then picked one of two values. The agent used the number directly and swapped the two choices. Same result, one less check. That also let my tool load some of the tree values ahead of time.
+I tried a fresh run to see if I could find a second trick and give it to the next agent. Four programs got wrong answers. I tried pulling out their edits, but none made a working program faster. So the part I’ve seen work is recovering a shortcut after a run. I’m still curious whether it can help another agent *during* a run. [The edits I tried](results/seed54_edits.json)
 
-My tool took **1,981 cycles** with the working code alone and **1,269 cycles** when it could use the failed attempts. The faster version passed all nine original tests. I also tried giving the tool just that one rule by hand. It built the exact same program. [Check the shortcut](results/zero_test.smt2)
-
-I wanted to see if I could find a *different* shortcut on a fresh run and give it to the next agent. Four agents wrote programs that ran but gave wrong answers. I couldn't recover a second shortcut that made a working program faster, so I stopped before handing anything over. That's where this stands: I've seen a failed attempt help once, after the run. Whether it can help the next agent while the search is still going is the part I'd like to figure out. [Edits I tried](results/seed54_edits.json)
+There’s a related paper from the group called *AI as a Compiler*. They gave a model a program written in Triton and asked it to write the low-level instructions for an NVIDIA GPU. The connection for me is who comes up with a better set of instructions. In their paper the model writes them directly. Here the model came up with one useful shortcut inside a broken program, and my Python compiler checked it and built the final program for the simulator. [AI as a Compiler](https://arxiv.org/abs/2609.36800)
 
 ## Try it
 
