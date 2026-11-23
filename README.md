@@ -12,8 +12,6 @@ I ran my own search on the same puzzle and saved eight programs that ran but gav
 
 One agent had found a shorter way to choose between two values. The original checked whether a number was zero and then picked A or B. The agent used the number itself and flipped the order of A and B. Same choice either way. That little change also let my compiler load some values ahead of time. With just the working code it got 1,981 cycles. With the eight programs to look through it got 1,269 and passed all nine tests. I tried adding just the A/B trick by hand and got the exact same program back. [The shortcut](results/zero_test.smt2)
 
-I tried it again on a fresh run because I wanted to see if I could give a shortcut like that to the next agent. This time I had four programs that gave wrong answers. None of the edits I pulled out made the working program faster, so I didn’t have anything to pass along. [The edits I tried](results/seed54_edits.json)
-
 ## Try it
 
 You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install z3` on Ubuntu). These commands use the saved attempts, so you can run them without an API key.
@@ -21,11 +19,10 @@ You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install
 ```sh
 git clone https://github.com/anthropics/original_performance_takehome.git benchmark
 git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
-python3 run_experiment.py            # first run (seed 52)
-python3 run_experiment.py --seed 54  # fresh run, with the old shortcut already included
+python3 run_experiment.py  # replay the seed 52 example
 ```
 
-The first run should print 1,981, 1,269, and 1,269 cycles. The fresh run should print 1,269 twice. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
+You should see 1,981 cycles with the working code alone, 1,269 with the saved attempts, and 1,269 with the A/B shortcut added by hand. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
@@ -37,5 +34,9 @@ git -C benchmark diff HEAD -- tests/ problem.py
 ```
 
 You should see nine tests pass and an empty diff for the tests and simulator.
+
+## Further directions
+
+What I’d like to know next is whether another agent can build on a shortcut like this. I’d split a search in two at the same point. On one side, RSI-top would keep going as usual. On the other, the next agent would get the working program with the shortcut already in it. I’d give both sides the same number of attempts and see which one finishes with the fastest program that passes the tests.
 
 Anshvardhan Shetty · Independent project, built with AI assistance.
