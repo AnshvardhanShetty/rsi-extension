@@ -10,7 +10,14 @@ Could I take just those two instructions, put them in the working program, and s
 
 I ran my own copy of RSI-top on Anthropic’s performance take-home, the coding task the group used in their write-up. The starter program walks through a tree of numbers, updating a value at each step. The agents had to make it produce the same answers in fewer cycles on a simulated processor. I saved eight of their attempts that ran but gave the wrong answers. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
 
-Two of those attempts came from workers 11 and 12 in the ordinary RSI-top run. Both programs gave the wrong final answer, but both contained the same useful shortcut. The working starter program checked whether a number was zero before choosing between two values. Workers 11 and 12 skipped that separate check because the instruction doing the choosing already handled zero. I wrote a Python tool that could borrow this part from either attempt and check that it always chose the same value as the starter. [The check](results/zero_test.smt2)
+Workers 11 and 12 both wrote programs that gave the wrong final answer. Both got this one part right, though. The starter needed to pick A when a number was zero and B otherwise. It used two instructions. The first asked “is the number zero?” The second used that answer to pick A or B.
+
+The machine’s pick instruction already has a rule of its own. Zero picks the **second** choice. Any other number picks the **first**. So both workers fed it the original number and put **B first, A second**.
+
+- Give it `0` and it picks the second choice, A.
+- Give it `7` and it picks the first choice, B. The same goes for every other nonzero number.
+
+That gives the same answer in one instruction. I wrote a Python tool that could find this shortcut in either worker’s code and check that it agreed with the starter for every input. [The check](results/zero_test.smt2)
 
 Then I ran the tool with and without the eight attempts. On its own, the best it could do with the working program was **1,981 cycles**. With the attempts to learn from, it got to **1,269 cycles**, and the program passed all nine tests. I tried one last thing. I took the eight attempts away and gave the tool just the shortcut by hand. It built the exact same 1,269-cycle program.
 
