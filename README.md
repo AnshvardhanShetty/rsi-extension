@@ -4,9 +4,9 @@ I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their exper
 
 I thought the part about looking through old attempts was interesting. When looking through things the agents tried there may have been programs that failed but still had things that worked faster or were useful. For example, say an agent figures out how to do something in two instructions instead of five, but somewhere else it introduces a bug. So, when you run the test and the whole thing fails. How would you find the two instruction and put them back in the working version?
 
-I also read *AI as a Compiler* from the same group. They took code written in Triton and asked a model to write the instructions for an NVIDIA GPU. On some programs the model came up with a faster way to do it than the Triton compiler did. 
+I also read *AI as a Compiler* from the same group. They took code written in Triton and asked a model to write the instructions for an NVIDIA GPU. On some programs the model came up with a faster way to do it than the Triton compiler did. One example was a calculation that slides a window over some data. Neighboring windows use some of the same values, and the model found a way to reuse them. [AI as a Compiler](https://arxiv.org/abs/2609.36800)
 
-
+That was the bit that clicked for me. If a model can spot a shortcut a compiler missed, maybe an RSI-top agent can do that even on a run where it gets something else wrong. So I wanted to try giving my compiler one of those wrong programs and asking a smaller question: is there even one step in here that computes the right value more cheaply?
 
 ## What I tried
 
