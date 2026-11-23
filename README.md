@@ -49,6 +49,4 @@ You should see nine tests pass and an empty diff for the tests and simulator.
 
 ## Further directions
 
-In a separate offline replay, I passed worker 11’s exact edit to the next attempt. It sped up the program it was applied to, but the search already had a faster one. The question I’d try next is whether I can find an edit that helps the best program the agents have so far.
-
-Anshvardhan Shetty
+I’d like agents working on the same problem to be able to borrow useful edits from one another, even when the program an edit came from gave a wrong answer. If one agent finds a shortcut, can another build on it and get to a faster correct program in the same number of tries?

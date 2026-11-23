@@ -6,7 +6,7 @@ from .pack_instructions import pack_instructions
 
 
 def assign_scratch_registers(starts, ends, first_free_register):
-    # Reuse scratch registers after the last instruction that reads them.
+    """Assign eight scratch registers per value and reuse them after its last read."""
     free_registers = []
     expiry = []
     physical = {}
@@ -37,6 +37,7 @@ def schedule_instructions(
     block_stagger=0,
     num_blocks=32,
 ):
+    """Turn one lane's output expression into instruction bundles for the whole batch."""
     order = []
     seen = set()
 
@@ -133,6 +134,7 @@ def build_tile_jobs(blocks, changing_nodes, expressions, fixed, output_node):
 def schedule_tile(
     jobs, job_inputs, start, load_weight, block_stagger, use_scalar_units
 ):
+    """Place ready jobs into cycles and record how long each result needs a register."""
     queues = defaultdict(list)
     dependents = [[] for _ in jobs]
     dependencies_left = []
@@ -242,6 +244,7 @@ def schedule_tile(
 
 
 def emit_bundles(cycles, jobs, job_inputs, physical, output_pointers):
+    """Replace job IDs with register addresses and yield one simulator bundle per cycle."""
     for emits in cycles:
         bundle = {}
         for engine, job_id, first_lane, count in emits:

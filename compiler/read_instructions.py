@@ -93,7 +93,11 @@ class ExpressionGraph:
         return node_id
 
     def read_program(self, bundles):
-        """Track which expression each scratch register holds. Writes take effect after a bundle."""
+        """Return the first lane's output expression and the operations seen along the way.
+
+        The starter's output is the value we want to reproduce. A worker with a
+        wrong output can still contribute useful intermediate operations.
+        """
         self.program_nodes = set()
         zero = self.constant(0)
         scratch = [zero] * 1536

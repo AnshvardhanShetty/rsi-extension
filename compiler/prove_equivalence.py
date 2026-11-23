@@ -68,6 +68,10 @@ class EquivalentExpressions:
         self.prover.stdin.flush()
 
     def prove(self, candidate, previous_group):
+        """Check whether the two calculations can ever give different 32-bit results.
+
+        A solver timeout leaves this particular match unproven.
+        """
         def dependencies(node, depth):
             if depth == 0 or node[0] in ("c", "x"):
                 return set()

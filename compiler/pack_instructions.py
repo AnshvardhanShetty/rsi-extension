@@ -1,4 +1,5 @@
 def scratch_access(engine, op):
+    """Return the scratch registers an instruction reads and writes, or None for an unknown instruction."""
     name, *operands = op
 
     def vector_registers(a):

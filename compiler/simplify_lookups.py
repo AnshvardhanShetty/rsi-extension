@@ -4,6 +4,8 @@ from .read_instructions import WORD_MASK, OPERATIONS
 
 
 class BoundedExpressions:
+    """Track the lowest and highest unsigned value each expression could produce."""
+
     def __init__(self, boolean_math=False):
         self.boolean_math = boolean_math
         self.nodes = []
@@ -27,6 +29,7 @@ class BoundedExpressions:
         return self.add_expression("c", x & WORD_MASK)
 
     def infer_bounds(self, operation, operands):
+        """Return a range, or the ID of a simpler expression when the bounds imply one."""
         if operation == "c":
             return operands[0], operands[0]
         if operation in ("x", "mem"):
@@ -126,6 +129,7 @@ class BoundedExpressions:
 def simplify_lookups(
     root, recipes, table_limit, tree_start, tree_end, boolean_math=False
 ):
+    """Rebuild the output expression, preloading small power-of-two ranges of tree values."""
     builder = BoundedExpressions(boolean_math)
     memo = {}
 
