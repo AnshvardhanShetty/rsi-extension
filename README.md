@@ -7,7 +7,7 @@ That got me wondering about the attempts that gave a wrong answer. An agent migh
 ## What I tried
 
 1. I gave the RSI-top agents a program that already worked and asked them to speed it up. I kept eight versions that ran but gave wrong answers. [The original program](https://github.com/anthropics/original_performance_takehome) · [The eight attempts](data/README.md)
-2. First I wanted to know how fast my tool could make the program on its own. I gave it only the original code. The version it built finished the task in **1,981 cycles** on the simulator. That was the time to beat.
+2. After the agents finished, I wrote a compiler in Python. It takes the calculations in the working program, looks for shorter ways to do them, and puts the instructions together into a program I can run. I first gave it only the original code to see how far its built-in rules would get. The program it built took **1,981 cycles**.
 3. I ran the tool again, this time letting it look through the eight attempts for shorter ways to do individual calculations. Workers 11 and 12 had each used one instruction where the original used two. The tool verified that their shortcut gave the same result for that calculation.
 4. I gave the tool the same settings as before. With the shortcut available, it built a program that finished in **1,269 cycles** and passed all nine benchmark tests.
 5. I wanted to know whether that one shortcut explained the difference. I took the eight attempts away and gave the tool just the original program and the shortcut by hand. It built the exact same 1,269-cycle program.
