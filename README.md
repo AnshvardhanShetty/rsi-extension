@@ -2,9 +2,11 @@
 
 I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their experiments was to give a few AI agents a working program and see how fast they could make it. When they got stuck, four other agents went back through what they’d tried and suggested a few things to do next. In the run they show, letting the search carry on as usual got them to 1,244 cycles. Going back through the attempts got them to 1,109. Fewer cycles means the program ran faster. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
 
-Thought the part about looking through old attempts was interesting. I was curious about the ones that ran but gave the wrong answer. Say an agent figures out how to do something in two instructions instead of five, but somewhere else it introduces a bug. You run the test and the whole thing fails. How would you find those two instructions? Could you put them back in the working version?
+I thought the part about looking through old attempts was interesting. When looking through things the agents tried there may have been programs that failed but still had things that worked faster or were useful. For example, say an agent figures out how to do something in two instructions instead of five, but somewhere else it introduces a bug. So, when you run the test and the whole thing fails. How would you find the two instruction and put them back in the working version?
 
-I also read *AI as a Compiler* from the same group. They took code written in Triton and asked a model to write the instructions for an NVIDIA GPU. On some programs the model came up with a faster way to do it than the Triton compiler did. That’s what made me want to put the two ideas together. What if I saved the programs from an RSI-top run and let a compiler try out little pieces of the ones that gave wrong answers? [AI as a Compiler](https://arxiv.org/abs/2609.36800)
+I also read *AI as a Compiler* from the same group. They took code written in Triton and asked a model to write the instructions for an NVIDIA GPU. On some programs the model came up with a faster way to do it than the Triton compiler did. 
+
+
 
 ## What I tried
 
