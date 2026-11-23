@@ -4,8 +4,6 @@ I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their exper
 
 I thought the part about going back through old attempts was interesting. I wondered what the planners could learn from a program that ran and gave the wrong answer. Suppose an agent makes two edits. It figures out how to do a calculation in two instructions instead of five. A few lines later, it reads the wrong value. The final answer is wrong, so I can’t use that version as it stands. But I’d still want those first two instructions if they really did the same job as the original five.
 
-I also read *AI as a Compiler* from the same group. They gave a model a working program written in Triton and asked it to write the instructions for an NVIDIA GPU. One example helped me see why it might be worth digging through those old attempts. The program did a calculation on overlapping windows of data. The model found a faster way to reuse the values that two windows had in common. That’s an idea you can point to in the code and try on its own. [AI as a Compiler](https://arxiv.org/abs/2609.36800)
-
 So I wanted to go back through the RSI-top attempts with a working copy of the program next to me. If I found an agent doing one calculation differently, I could check whether both versions always gave the same value *at that step*. If they did, I could use the agent’s version of that calculation, leave the rest of the working program alone, and time the result. The hope was that the next agent could start from that faster, working version instead of having to come up with the same idea again.
 
 ## What I tried
