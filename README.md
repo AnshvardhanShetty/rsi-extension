@@ -1,25 +1,32 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. One of their experiments was to give a few AI agents a working program and see how fast they could make it. When they got stuck, four other agents went back through what they’d tried and suggested a few things to do next. In the run they show, letting the search carry on as usual got them to 1,244 cycles. Going back through the attempts got them to 1,109. Fewer cycles means the program ran faster. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents try to speed up a working program. In one experiment, four agents looked back through earlier attempts and suggested what to try next. Continuing the search as usual got them to 1,244 cycles. With those suggestions, they got to 1,109. Fewer cycles means the program ran faster. [Their write-up](https://rsi-top.github.io/) · [Their code](https://github.com/RSI-top/rsi-top-wrapper)
 
-I thought the part about going back through old attempts was interesting. I wondered what the planners could learn from a program that ran and gave the wrong answer. Suppose an agent makes two edits. It figures out how to do a calculation in two instructions instead of five. A few lines later, it reads the wrong value. The final answer is wrong, so I can’t use that version as it stands. But I’d still want those first two instructions if they really did the same job as the original five.
-
-Could I take just those two instructions, put them in the working program, and see if it gave the right answer faster?
+That got me wondering about the attempts that gave a wrong answer. An agent might speed up one part of a program and break something else. Could I keep the good edit?
 
 ## What I tried
 
-I ran my own copy of RSI-top on Anthropic’s performance take-home, the coding task the group used in their write-up. The starter program walks through a tree of numbers, updating a value at each step. The puzzle comes with a Python simulator that acts like a processor. It runs the instructions the agents write and counts how many cycles they take. The goal was to get the same answers in fewer cycles. I saved eight of their attempts that ran but gave the wrong answers. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
+I ran RSI-top on the same coding task and saved eight programs that gave wrong answers. I wrote a Python tool to look through them for shorter ways to do parts of the working program. Before borrowing a piece, the tool checked that it would give the same answer as the original piece for every possible input. [Anthropic’s coding task](https://github.com/anthropics/original_performance_takehome)
 
-Workers 11 and 12 both wrote programs that gave the wrong final answer. Both got this one part right, though. The starter needed to pick A when a number was zero and B otherwise. It used two instructions. The first asked “is the number zero?” The second used that answer to pick A or B.
+Two of the eight programs had the same useful edit. Workers 11 and 12 had each found a way to make a choice in one instruction where the working program used two. I ran my tool twice to see how much that mattered.
 
-That simulated processor has a built-in instruction for picking between two values. Zero picks the **second** choice. Any other number picks the **first**. So both workers fed it the original number and put **B first, A second**.
+| What I gave the tool | Best time |
+| --- | ---: |
+| The working program alone | 1,981 cycles |
+| The working program and the eight wrong attempts | 1,269 cycles |
 
-- Give it `0` and it picks the second choice, A.
-- Give it `7` and it picks the first choice, B. The same goes for every other nonzero number.
+The 1,269-cycle program passed all nine tests. To check whether that one edit explained the difference, I gave the tool just the working program and the shortcut by hand. It built the exact same program.
 
-That gives the same answer in one instruction. I wrote a Python tool that could find this shortcut in either worker’s code and check that it agreed with the starter for every input. [The check](results/zero_test.smt2)
+<details>
+<summary>What was the shortcut?</summary>
 
-Then I ran the tool with and without the eight attempts. On its own, the best it could do with the working program was **1,981 cycles**. With the attempts to learn from, it got to **1,269 cycles**, and the program passed all nine tests. I tried one last thing. I took the eight attempts away and gave the tool just the shortcut by hand. It built the exact same 1,269-cycle program.
+The program needed to choose A for zero and B for any other number. The original code first checked whether its input was zero, then used the answer to choose A or B. The processor in this coding task can already choose between two values based on whether a number is zero. The workers used that instruction directly. With B as its first choice and A as its second, it picks A for zero and B for everything else. Skipping the separate check also let the tool move some later instructions earlier. [The check for this edit](results/zero_test.smt2)
+
+</details>
+
+## Further directions
+
+I’d like to try this during a search. When my tool recovers a shortcut, I’d give the faster working program to the next agent. With the same number of attempts left, can it finish with a faster program than RSI-top would find on its own?
 
 ## Try it
 
@@ -31,7 +38,7 @@ git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
 python3 run_experiment.py  # replay the seed 52 example
 ```
 
-You should see 1,981 cycles with the working code alone, 1,269 with the saved attempts, and 1,269 with the shortcut added by hand. Each version gets the same 90 tries at arranging its instructions, and the tool checks every answer on eight fresh trees. [Experiment code](run_experiment.py)
+You should see 1,981, 1,269, and 1,269 cycles. Each run tries the same 90 ways of arranging the instructions and checks the answers on eight fresh trees. [Experiment code](run_experiment.py)
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
@@ -43,9 +50,5 @@ git -C benchmark diff HEAD -- tests/ problem.py
 ```
 
 You should see nine tests pass and an empty diff for the tests and simulator.
-
-## Further directions
-
-What I’d like to know next is whether another agent can build on a shortcut like this. I’d split a search in two at the same point. On one side, RSI-top would keep going as usual. On the other, the next agent would get the working program with the shortcut already in it. I’d give both sides the same number of attempts and see which one finishes with the fastest program that passes the tests.
 
 Anshvardhan Shetty · Independent project, built with AI assistance.
