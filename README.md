@@ -49,6 +49,6 @@ You should see nine tests pass and an empty diff for the tests and simulator.
 
 ## Further directions
 
-If I give the next RSI-top agent a working program with the shortcut already in it, can it beat ordinary RSI-top with the same number of attempts left?
+I found this shortcut after the agents had finished. What if I could catch one while they were still working? I’d split a run in two when my tool finds a shortcut. On one side the agents would carry on as usual. On the other they’d get a working copy with the shortcut already applied. I’d give both sides the same number of tries and see which one ends up with the fastest correct program.
 
 Anshvardhan Shetty · Independent project, built with AI assistance.
