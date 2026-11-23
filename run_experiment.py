@@ -97,13 +97,12 @@ def verify_program(simulator, program, first_seed):
         machine = simulator.Machine(memory, program, simulator.DebugInfo({}))
         machine.enable_pause = machine.enable_debug = False
         machine.run()
-        for reference in simulator.reference_kernel2(memory):
+        # The reference updates memory in place and yields at pause instructions.
+        for _ in simulator.reference_kernel2(memory):
             pass
-        start = reference[6]
+        start = memory[6]
         end = start + BATCH_SIZE
-        if machine.mem[start:end] != reference[start:end] or machine.cycle != len(
-            program
-        ):
+        if machine.mem[start:end] != memory[start:end] or machine.cycle != len(program):
             raise ValueError(f"Verification failed on tree {seed}")
 
 
@@ -146,8 +145,8 @@ def main():
         first_tree = 542001
 
     # Save the winning programs so the original submission tests can run them as well.
-    out = Path("output") / f"seed{args.seed}"
-    out.mkdir(parents=True, exist_ok=True)
+    output_folder = Path("output") / f"seed{args.seed}"
+    output_folder.mkdir(parents=True, exist_ok=True)
     for name, donors, add_rule in cases:
         graph, root, expressions = collect_expressions(
             simulator, folder, donors, add_rule
@@ -155,7 +154,7 @@ def main():
         program = find_fastest_schedule(graph, root, expressions)
         verify_program(simulator, program, first_tree)
         filename = name.replace(" + ", "_and_").replace(" ", "_") + ".json.gz"
-        with gzip.open(out / filename, "wt") as stream:
+        with gzip.open(output_folder / filename, "wt") as stream:
             json.dump(program, stream, sort_keys=True)
         print(f"{name:30s} {len(program):5d} cycles   8 trees passed", flush=True)
 

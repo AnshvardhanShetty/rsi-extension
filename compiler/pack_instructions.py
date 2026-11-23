@@ -40,6 +40,7 @@ def scratch_access(engine, op):
 
 
 def pack_instructions(bundles):
+    """Merge neighboring bundles if they fit and still read the same values."""
     limits = {"alu": 12, "valu": 6, "load": 2, "store": 2, "flow": 1}
     if any("jump" in op[0] for bundle in bundles for op in bundle.get("flow", [])):
         return bundles
@@ -51,15 +52,18 @@ def pack_instructions(bundles):
             (engine, op) for engine, slots in bundle.items() for op in slots
         ]
         register_accesses = [scratch_access(engine, op) for engine, op in instructions]
-        if not instructions or any(u is None for u in register_accesses):
+        if not instructions or None in register_accesses:
             if pending:
                 packed.append(pending)
             packed.append(bundle)
             pending = {}
             writes = set()
             continue
-        new_reads = set().union(*(u[0] for u in register_accesses))
-        new_writes = set().union(*(u[1] for u in register_accesses))
+        new_reads = set()
+        new_writes = set()
+        for read_registers, written_registers in register_accesses:
+            new_reads.update(read_registers)
+            new_writes.update(written_registers)
         overflow = any(
             len(pending.get(engine, [])) + len(operands) > limits[engine]
             for engine, operands in bundle.items()

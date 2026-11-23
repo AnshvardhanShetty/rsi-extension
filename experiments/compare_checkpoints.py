@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-results = Path(__file__).resolve().parents[1] / "results/paired_checkpoints.json"
+RESULTS = Path(__file__).resolve().parents[1] / "results/paired_checkpoints.json"
 
 
 def verified_cycles(program):
@@ -19,17 +19,15 @@ def verified_cycles(program):
 
 
 def main():
-    checkpoints = json.loads(results.read_text())["seeds"]
+    checkpoints = json.loads(RESULTS.read_text())["seeds"]
     print("seed  start  ordinary  feedback  cycles saved by feedback")
     for seed, checkpoint in checkpoints.items():
         start = verified_cycles(checkpoint["shared_best"])
         scores = {}
         for name, branch in checkpoint["arms"].items():
-            if not branch["complete"] or (
-                branch["slots"],
-                branch["calls"],
-                branch["receipts"],
-            ) != (8, 8, 8):
+            # A dispatched request only counts in the comparison if the model replied.
+            counts = (branch["slots"], branch["calls"], branch["receipts"])
+            if not branch["complete"] or counts != (8, 8, 8):
                 raise ValueError(f"Seed {seed}: {name} did not finish eight proposals.")
             scores[name] = min(start, verified_cycles(branch["best"]))
         ordinary = scores["native"]

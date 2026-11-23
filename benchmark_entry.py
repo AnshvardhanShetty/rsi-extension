@@ -1,4 +1,4 @@
-"""Load the replayed instruction stream in the upstream benchmark's KernelBuilder interface."""
+"""Let the original benchmark run the instructions saved by run_experiment.py."""
 
 import gzip
 import json
@@ -13,9 +13,8 @@ class KernelBuilder:
             raise ValueError(
                 "This instruction stream is for the recorded benchmark dimensions."
             )
-        with gzip.open(
-            Path(__file__).with_name("failed_workers.json.gz"), "rt"
-        ) as stream:
+        program = Path(__file__).with_name("failed_workers.json.gz")
+        with gzip.open(program, "rt") as stream:
             self.instrs = json.load(stream)
 
     def debug_info(self):

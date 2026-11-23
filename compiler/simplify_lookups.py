@@ -35,7 +35,7 @@ class BoundedExpressions:
         if low == high:
             return self.constant(int(OPERATIONS[operation](*low)) & WORD_MASK)
 
-        def linear(lowest, highest):
+        def unsigned_range(lowest, highest):
             return (
                 (lowest, highest)
                 if 0 <= lowest <= highest <= WORD_MASK
@@ -73,9 +73,9 @@ class BoundedExpressions:
             for node_id in (0, 1):
                 if high[node_id] == 0:
                     return operands[1 - node_id]
-            return linear(sum(low), sum(high))
+            return unsigned_range(sum(low), sum(high))
         if operation == "-":
-            return linear(low[0] - high[1], high[0] - low[1])
+            return unsigned_range(low[0] - high[1], high[0] - low[1])
         if operation == "*" or operation == "fma":
             for node_id in (0, 1):
                 if high[node_id] == 0:
@@ -88,7 +88,7 @@ class BoundedExpressions:
                             "+", operands[1 - node_id], operands[2]
                         )
                     )
-            return linear(
+            return unsigned_range(
                 low[0] * low[1] + (low[2] if operation == "fma" else 0),
                 high[0] * high[1] + (high[2] if operation == "fma" else 0),
             )
@@ -99,21 +99,20 @@ class BoundedExpressions:
         if operation == ">>":
             return low[0] >> min(high[1], 32), high[0] >> min(low[1], 32)
         if operation == "<<" and high[1] < 32:
-            return linear(low[0] << low[1], high[0] << high[1])
+            return unsigned_range(low[0] << low[1], high[0] << high[1])
         return 0, WORD_MASK
 
-    def lookup_small_table(self, operands, lowest, highest):
+    def lookup_small_table(self, address, lowest, highest):
         size = highest - lowest + 1
-        # Index by low address bits; rotate the loaded values into residue order.
-        values = [
-            self.add_expression(
-                "mem", self.constant(lowest + (node_id - lowest) % size)
-            )
-            for node_id in range(size)
-        ]
+        # Slot i holds the address whose low bits are i. For addresses 7..10
+        # that gives [8, 9, 10, 7], so two bit tests select the right value.
+        values = []
+        for slot in range(size):
+            table_address = lowest + (slot - lowest) % size
+            values.append(self.add_expression("mem", self.constant(table_address)))
         bit = 1
         while len(values) > 1:
-            condition = self.add_expression("&", operands, self.constant(bit))
+            condition = self.add_expression("&", address, self.constant(bit))
             values = [
                 self.add_expression(
                     "sel", condition, values[node_id + 1], values[node_id]
@@ -143,11 +142,11 @@ def simplify_lookups(
             args = [visit(x) for x in recipe[1:]]
             if operation == "mem":
                 lowest, highest = builder.bounds[args[0]]
-                n = highest - lowest + 1
+                table_size = highest - lowest + 1
                 if (
                     tree_start <= lowest <= highest < tree_end
-                    and n <= table_limit
-                    and n & (n - 1) == 0
+                    and table_size <= table_limit
+                    and table_size & (table_size - 1) == 0
                 ):
                     node_id = builder.lookup_small_table(args[0], lowest, highest)
                 else:

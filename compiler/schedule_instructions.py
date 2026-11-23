@@ -69,7 +69,7 @@ def schedule_instructions(
         for a in expressions[node_id][1:]
         if a in fixed_nodes
     }
-    # Constant and pointer construction needs a single scalar temporary after each broadcast.
+    # Register 0 is temporary. Each broadcast leaves eight copies in scratch.
     output = []
     fixed = {}
     output_pointers = {}
@@ -92,180 +92,185 @@ def schedule_instructions(
 
     output = pack_instructions(output)
     for start in range(0, num_blocks, blocks_per_tile):
-        jobs = []
-        job_for_node = {}
-        job_inputs = []
-        dependents = []
-        dependencies_left = []
-        queues = defaultdict(list)
+        blocks = range(start, min(start + blocks_per_tile, num_blocks))
+        jobs, job_inputs = build_tile_jobs(
+            blocks, changing_nodes, expressions, fixed, output_node
+        )
+        cycles, starts, ends = schedule_tile(
+            jobs, job_inputs, start, load_weight, block_stagger, use_scalar_units
+        )
+        registers = assign_scratch_registers(starts, ends, next_register)
+        output.extend(
+            emit_bundles(cycles, jobs, job_inputs, registers, output_pointers)
+        )
+    return output
 
-        def add_job(block, node_id, expression):
-            job_id = len(jobs)
-            job_for_node[block, node_id] = job_id
-            jobs.append((block, node_id, expression))
-            dependents.append([])
-            a = (
-                []
-                if expression[0] == "x"
-                else [
-                    (fixed[x], True)
-                    if x in fixed_nodes
-                    else (job_for_node[block, x], False)
-                    for x in expression[1:]
-                ]
-            )
-            job_inputs.append(a)
-            deps = {k for k, is_fixed in a if not is_fixed}
-            dependencies_left.append(len(deps))
-            for k in deps:
-                dependents[k].append(job_id)
 
-        for block in range(start, min(num_blocks, start + blocks_per_tile)):
-            for node_id in changing_nodes:
-                add_job(block, node_id, expressions[node_id])
-            add_job(block, "output", ("store", output_node))
-        # Give jobs on the longest dependency chain first choice of an engine.
-        priority_height = [0] * len(jobs)
-        for job_id in reversed(range(len(jobs))):
-            h = load_weight if jobs[job_id][2][0] == "mem" else 1
-            priority_height[job_id] = h + max(
-                (priority_height[s] for s in dependents[job_id]), default=0
-            )
+def build_tile_jobs(blocks, changing_nodes, expressions, fixed, output_node):
+    """Each block computes the same expressions but has its own inputs and output."""
+    jobs = []
+    job_for_node = {}
+    job_inputs = []
 
-        def engine_queue(op):
-            if op in ("x", "mem"):
-                return "load"
-            if op == "store":
-                return "store"
-            if op == "sel":
-                return "flow"
-            if op == "fma":
-                return "valu"
-            return "binary"
+    def add_job(block, node_id, expression):
+        job_for_node[block, node_id] = len(jobs)
+        jobs.append((block, node_id, expression))
+        inputs = []
+        for source in expression[1:]:
+            if source in fixed:
+                inputs.append((fixed[source], True))
+            else:
+                inputs.append((job_for_node[block, source], False))
+        job_inputs.append(inputs)
 
-        def queue_ready_job(job_id):
-            heapq.heappush(
-                queues[engine_queue(jobs[job_id][2][0])],
-                (
-                    -priority_height[job_id]
-                    + block_stagger * (jobs[job_id][0] - start),
-                    job_id,
-                ),
-            )
+    for block in blocks:
+        for node_id in changing_nodes:
+            add_job(block, node_id, expressions[node_id])
+        add_job(block, "output", ("store", output_node))
+    return jobs, job_inputs
 
-        for job_id, count in enumerate(dependencies_left):
-            if count == 0:
-                queue_ready_job(job_id)
-        lane = Counter()
-        cycles = []
-        starts = {}
-        ends = {}
-        completed = 0
-        while completed < len(jobs):
-            tick = len(cycles)
-            emits = []
-            finished = []
 
-            def issue_lanes(job_id, engine, count):
-                expression = jobs[job_id][2]
-                op = expression[0]
-                if op != "store":
-                    starts.setdefault(job_id, tick)
-                    ends[job_id] = max(tick, ends.get(job_id, 0))
-                for a, is_fixed in job_inputs[job_id]:
-                    if not is_fixed:
-                        ends[a] = tick
-                first_lane = lane[job_id]
-                width = 8 if op == "mem" or engine == "alu" else 1
-                issued_width = min(count, width - first_lane)
-                if issued_width <= 0:
-                    raise AssertionError((job_id, op, first_lane, engine))
-                emits.append((engine, job_id, first_lane, issued_width))
-                lane[job_id] += issued_width
-                if lane[job_id] == width:
-                    finished.append(job_id)
-                    return issued_width, True
-                return issued_width, False
+def schedule_tile(
+    jobs, job_inputs, start, load_weight, block_stagger, use_scalar_units
+):
+    queues = defaultdict(list)
+    dependents = [[] for _ in jobs]
+    dependencies_left = []
+    for job_id, inputs in enumerate(job_inputs):
+        producers = {source for source, is_register in inputs if not is_register}
+        dependencies_left.append(len(producers))
+        for producer in producers:
+            dependents[producer].append(job_id)
+    # Give jobs on the longest dependency chain first choice of an engine.
+    priority_height = [0] * len(jobs)
+    for job_id in reversed(range(len(jobs))):
+        instruction_cost = load_weight if jobs[job_id][2][0] == "mem" else 1
+        priority_height[job_id] = instruction_cost + max(
+            (priority_height[s] for s in dependents[job_id]), default=0
+        )
 
-            for engine, queue_name, free_slots in [
-                ("load", "load", 2),
-                ("store", "store", 2),
-                ("flow", "flow", 1),
-            ]:
-                queue = queues[queue_name]
-                while queue and free_slots:
-                    job_id = queue[0][1]
-                    count, done = issue_lanes(job_id, engine, free_slots)
-                    free_slots -= count
-                    if done:
-                        heapq.heappop(queue)
-            for _ in range(6):
-                choices = [
-                    (queues[k][0], k)
-                    for k in ("valu", "binary")
-                    if queues[k] and (k != "binary" or lane[queues[k][0][1]] == 0)
-                ]
-                if not choices:
-                    break
-                (_, job_id), k = min(choices)
-                heapq.heappop(queues[k])
-                issue_lanes(job_id, "valu", 1)
-            free_slots = 12 if use_scalar_units else 0
-            while free_slots and (queues["partial"] or queues["binary"]):
-                queue = queues["partial"] if queues["partial"] else queues["binary"]
-                priority, job_id = heapq.heappop(queue)
-                count, done = issue_lanes(job_id, "alu", free_slots)
+    def engine_queue(op):
+        if op in ("x", "mem"):
+            return "load"
+        if op == "store":
+            return "store"
+        if op == "sel":
+            return "flow"
+        if op == "fma":
+            return "valu"
+        return "binary"
+
+    def queue_ready_job(job_id):
+        heapq.heappush(
+            queues[engine_queue(jobs[job_id][2][0])],
+            (
+                -priority_height[job_id] + block_stagger * (jobs[job_id][0] - start),
+                job_id,
+            ),
+        )
+
+    for job_id, count in enumerate(dependencies_left):
+        if count == 0:
+            queue_ready_job(job_id)
+    lane = Counter()
+    cycles = []
+    starts = {}
+    ends = {}
+    completed = 0
+    while completed < len(jobs):
+        tick = len(cycles)
+        emits = []
+        finished = []
+
+        def issue_lanes(job_id, engine, count):
+            expression = jobs[job_id][2]
+            op = expression[0]
+            if op != "store":
+                starts.setdefault(job_id, tick)
+                ends[job_id] = max(tick, ends.get(job_id, 0))
+            for source, is_fixed in job_inputs[job_id]:
+                if not is_fixed:
+                    ends[source] = tick
+            first_lane = lane[job_id]
+            width = 8 if op == "mem" or engine == "alu" else 1
+            issued_width = min(count, width - first_lane)
+            if issued_width <= 0:
+                raise AssertionError((job_id, op, first_lane, engine))
+            emits.append((engine, job_id, first_lane, issued_width))
+            lane[job_id] += issued_width
+            if lane[job_id] == width:
+                finished.append(job_id)
+                return issued_width, True
+            return issued_width, False
+
+        for engine, free_slots in (("load", 2), ("store", 2), ("flow", 1)):
+            queue = queues[engine]
+            while queue and free_slots:
+                job_id = queue[0][1]
+                count, done = issue_lanes(job_id, engine, free_slots)
                 free_slots -= count
-                if not done:
-                    heapq.heappush(queues["partial"], (priority, job_id))
-            assert emits
-            cycles.append(emits)
-            completed += len(finished)
-            for job_id in finished:
-                for s in dependents[job_id]:
-                    dependencies_left[s] -= 1
-                    if dependencies_left[s] == 0:
-                        queue_ready_job(s)
-        physical = assign_scratch_registers(starts, ends, next_register)
-        for emits in cycles:
-            bundle = {}
-            for engine, job_id, first_lane, count in emits:
-                block, node_id, expression = jobs[job_id]
-                op = expression[0]
-                registers = [
-                    value if fixed else physical[value]
-                    for value, fixed in job_inputs[job_id]
-                ]
-                emit = bundle.setdefault(engine, []).append
-                if op == "store":
-                    emit(("vstore", output_pointers[block], registers[0]))
-                    continue
-                destination = physical[job_id]
-                if op == "x":
-                    emit(("vload", destination, output_pointers[block]))
-                elif op == "mem":
-                    for lane_index in range(first_lane, first_lane + count):
-                        emit(("load_offset", destination, registers[0], lane_index))
-                elif engine == "alu":
-                    for lane_index in range(first_lane, first_lane + count):
-                        emit(
-                            (
-                                op,
-                                destination + lane_index,
-                                *(value_id + lane_index for value_id in registers),
-                            )
-                        )
-                else:
+                if done:
+                    heapq.heappop(queue)
+        for _ in range(6):
+            choices = [
+                (queues[k][0], k)
+                for k in ("valu", "binary")
+                if queues[k] and (k != "binary" or lane[queues[k][0][1]] == 0)
+            ]
+            if not choices:
+                break
+            (_, job_id), k = min(choices)
+            heapq.heappop(queues[k])
+            issue_lanes(job_id, "valu", 1)
+        free_slots = 12 if use_scalar_units else 0
+        while free_slots and (queues["partial"] or queues["binary"]):
+            queue = queues["partial"] if queues["partial"] else queues["binary"]
+            priority, job_id = heapq.heappop(queue)
+            count, done = issue_lanes(job_id, "alu", free_slots)
+            free_slots -= count
+            if not done:
+                heapq.heappush(queues["partial"], (priority, job_id))
+        assert emits
+        cycles.append(emits)
+        completed += len(finished)
+        for job_id in finished:
+            for s in dependents[job_id]:
+                dependencies_left[s] -= 1
+                if dependencies_left[s] == 0:
+                    queue_ready_job(s)
+    return cycles, starts, ends
+
+
+def emit_bundles(cycles, jobs, job_inputs, physical, output_pointers):
+    for emits in cycles:
+        bundle = {}
+        for engine, job_id, first_lane, count in emits:
+            block, _, expression = jobs[job_id]
+            op = expression[0]
+            registers = [
+                value if is_register else physical[value]
+                for value, is_register in job_inputs[job_id]
+            ]
+            emit = bundle.setdefault(engine, []).append
+            if op == "store":
+                emit(("vstore", output_pointers[block], registers[0]))
+                continue
+            destination = physical[job_id]
+            if op == "x":
+                emit(("vload", destination, output_pointers[block]))
+            elif op == "mem":
+                for lane_index in range(first_lane, first_lane + count):
+                    emit(("load_offset", destination, registers[0], lane_index))
+            elif engine == "alu":
+                for lane_index in range(first_lane, first_lane + count):
                     emit(
                         (
-                            "vselect"
-                            if op == "sel"
-                            else "multiply_add"
-                            if op == "fma"
-                            else op,
-                            destination,
-                            *registers,
+                            op,
+                            destination + lane_index,
+                            *(value_id + lane_index for value_id in registers),
                         )
                     )
-            output.append(bundle)
-    return output
+            else:
+                instruction = {"sel": "vselect", "fma": "multiply_add"}.get(op, op)
+                emit((instruction, destination, *registers))
+        yield bundle

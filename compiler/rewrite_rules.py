@@ -2,7 +2,7 @@
 
 
 def arithmetic_rewrites(graph, available):
-    """Enumerate ordinary constant-strength reductions and fused arithmetic in the scalar IR."""
+    """Try cheaper ways to do the same arithmetic in one lane."""
     nodes = set(available)
     candidates = set()
 
@@ -29,41 +29,38 @@ def arithmetic_rewrites(graph, available):
             and right_constant > 0
             and right_constant & (right_constant - 1) == 0
         ):
-            operation(
-                "&" if name == "%" else ">>",
-                left,
-                constant(
-                    right_constant - 1
-                    if name == "%"
-                    else right_constant.bit_length() - 1
-                ),
-            )
+            if name == "%":
+                operation("&", left, constant(right_constant - 1))
+            else:
+                shift = right_constant.bit_length() - 1
+                operation(">>", left, constant(shift))
         if name == "sel":
             condition, when_true, when_false = node[1:]
-            y = graph.constant_value(when_true)
-            z = graph.constant_value(when_false)
-            if (
-                y is not None
-                and z is not None
-                and graph.nodes[condition][0] in ("<", "==")
-            ):
-                operation("fma", condition, constant(y - z), constant(z))
-            if z == 0 and graph.nodes[condition][0] in ("<", "=="):
+            if graph.nodes[condition][0] not in ("<", "=="):
+                continue
+            # A comparison produces 0 or 1, so it can act as a multiplier.
+            true_value = graph.constant_value(when_true)
+            false_value = graph.constant_value(when_false)
+            if true_value is not None and false_value is not None:
+                operation(
+                    "fma",
+                    condition,
+                    constant(true_value - false_value),
+                    constant(false_value),
+                )
+            if false_value == 0:
                 operation("*", condition, when_true)
-            if y == 0 and graph.nodes[condition][0] in ("<", "=="):
+            if true_value == 0:
                 operation("*", operation("^", condition, constant(1)), when_false)
         if name == "==":
             for x, compared_value in ((left, right_constant), (right, left_constant)):
-                test_operand = graph.nodes[x]
-                if compared_value == 0 and (
-                    test_operand[0] == "%"
-                    and graph.constant_value(test_operand[2]) == 2
-                    or test_operand[0] == "&"
-                    and 1
-                    in (
-                        graph.constant_value(test_operand[1]),
-                        graph.constant_value(test_operand[2]),
-                    )
+                if compared_value != 0:
+                    continue
+                test = graph.nodes[x]
+                if test[0] == "%" and graph.constant_value(test[2]) == 2:
+                    operation("^", x, constant(1))
+                elif test[0] == "&" and any(
+                    graph.constant_value(arg) == 1 for arg in test[1:]
                 ):
                     operation("^", x, constant(1))
         if name == "+":
@@ -78,9 +75,13 @@ def arithmetic_rewrites(graph, available):
                 ):
                     factor = 1 << graph.constant_value(product[2])
                     operation("fma", product[1], constant(factor), other)
-                    o = graph.nodes[other]
-                    if o[0] == "+" and product[1] in o[1:]:
-                        addend = o[2] if product[1] == o[1] else o[1]
+                    other_term = graph.nodes[other]
+                    if other_term[0] == "+" and product[1] in other_term[1:]:
+                        addend = (
+                            other_term[2]
+                            if product[1] == other_term[1]
+                            else other_term[1]
+                        )
                         operation("fma", product[1], constant(factor + 1), addend)
     return candidates
 

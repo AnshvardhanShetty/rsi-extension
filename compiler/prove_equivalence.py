@@ -1,4 +1,4 @@
-"""Propose equalities by execution fingerprint, then check bounded bit-vector identities with Z3."""
+"""Group expressions that compute the same 32-bit value. Z3 checks each proposed match."""
 
 import shutil
 import subprocess
@@ -18,8 +18,8 @@ BV = {
 }
 
 
-def hex_word(node):
-    return f"#x{node:08x}"
+def hex_word(value):
+    return f"#x{value:08x}"
 
 
 class EquivalentExpressions:
@@ -92,45 +92,38 @@ class EquivalentExpressions:
                 return variable(0)
             if operation == "c":
                 return hex_word(node[1])
-            args = [
-                variable(i + 1)
-                if self.recipes[i][0] not in ("x", "c") and (depth == 0 or i in common)
-                else solver_expression(self.recipes[i], depth - 1)
-                for i in node[1:]
-            ]
+            # Stop at shared inputs or the depth limit. Both sides use the same
+            # solver variable for the same group, whatever value it might hold.
+            args = []
+            for group_id in node[1:]:
+                child = self.recipes[group_id]
+                if child[0] not in ("x", "c") and (depth == 0 or group_id in common):
+                    args.append(variable(group_id + 1))
+                else:
+                    args.append(solver_expression(child, depth - 1))
             if operation == "sel":
                 return f"(ite (= {args[0]} {hex_word(0)}) {args[2]} {args[1]})"
             if operation in ("<", "=="):
-                return f"(ite ({'bvult' if operation == '<' else '='} {args[0]} {args[1]}) {hex_word(1)} {hex_word(0)})"
+                comparison = "bvult" if operation == "<" else "="
+                return f"(ite ({comparison} {args[0]} {args[1]}) {hex_word(1)} {hex_word(0)})"
             if operation == "fma":
                 return f"(bvadd (bvmul {args[0]} {args[1]}) {args[2]})"
-            return (
-                "("
-                + ("mem" if operation == "mem" else BV[operation])
-                + " "
-                + " ".join(args)
-                + ")"
-            )
+            operator = "mem" if operation == "mem" else BV[operation]
+            return f"({operator} {' '.join(args)})"
 
-        a = solver_expression(candidate, 3)
-        b = (
-            variable(previous_group + 1)
-            if previous_group in common and previous[0] not in ("c", "x")
-            else solver_expression(previous, 3)
-        )
-        if a == b:
+        left = solver_expression(candidate, 3)
+        if previous_group in common and previous[0] not in ("c", "x"):
+            right = variable(previous_group + 1)
+        else:
+            right = solver_expression(previous, 3)
+        if left == right:
             return True
         declarations = "\n".join(
             f"(declare-const v{i} (_ BitVec 32))" for i in variables - self.declared
         )
         self.declared |= variables
         self.send(
-            declarations
-            + "\n(push)\n(assert (distinct "
-            + a
-            + " "
-            + b
-            + "))\n(check-sat)\n(pop)"
+            f"{declarations}\n(push)\n(assert (distinct {left} {right}))\n(check-sat)\n(pop)"
         )
         result = self.prover.stdout.readline().strip()
         assert result in ("sat", "unsat", "unknown"), result
@@ -165,12 +158,11 @@ def choose_expressions(graph, groups, available_nodes, output_node):
                 args = () if recipe[0] in ("c", "x") else recipe[1:]
                 if any(i not in cost for i in args):
                     continue
-                # Path-weighted local cost keeps the long recurrent hash from dominating numerically.
-                recipe_cost = (
-                    (0 if recipe[0] in ("c", "x") else 8 if recipe[0] == "mem" else 1)
-                    + max((cost[i] for i in args), default=0)
-                    + sum(cost[i] for i in set(args)) * 0.001
-                )
+                # Prefer the shorter dependency chain. Loads cost more than arithmetic.
+                instruction_cost = {"c": 0, "x": 0, "mem": 8}.get(recipe[0], 1)
+                longest_input = max((cost[source] for source in args), default=0)
+                input_cost = sum(cost[source] for source in set(args))
+                recipe_cost = instruction_cost + longest_input + input_cost * 0.001
                 if group_id not in cost or (recipe_cost, recipe) < (
                     cost[group_id],
                     best[group_id],
