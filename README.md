@@ -49,4 +49,4 @@ You should see nine tests pass and an empty diff for the tests and simulator.
 
 ## Further directions
 
-I’d like agents working on the same problem to be able to borrow useful edits from one another, even when the program an edit came from gave a wrong answer. If one agent finds a shortcut, can another build on it and get to a faster correct program in the same number of tries?
+I’d like to see what happens over a whole search. The agents could keep a shared list of edits that passed the tests and use one whenever it fits the program they’re working on. I’d give two teams the same starting code and the same number of tries, let one team use the list, and compare the fastest correct program each team finishes with.
