@@ -51,4 +51,4 @@ You should see nine tests pass and an empty diff for the tests and simulator.
 
 I’d start by replaying the run up to worker 11. At that point my tool could look back at the attempts so far, recover the shortcut, and apply it to a working copy of the Python code. If that copy passes the tests and runs faster, I’d give it to the next agent as its starting point. Then I’d let RSI-top continue from the same point without my change, give both runs the same number of tries, and see where they finish.
 
-Anshvardhan Shetty · Independent project, built with AI assistance.
+Anshvardhan Shetty
