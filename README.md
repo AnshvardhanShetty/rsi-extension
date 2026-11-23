@@ -8,7 +8,7 @@ That got me wondering about the attempts that gave a wrong answer. An agent migh
 
 I ran RSI-top on [Anthropic’s coding task](https://github.com/anthropics/original_performance_takehome) and saved [eight attempts](data/README.md) that got the answer wrong. I wrote a Python tool to see if any of the edits were worth keeping.
 
-The starter used two instructions to pick between two values. Workers 11 and 12 did it in one. My tool checked that both versions always picked the same value.
+Anthropic gives you a working program to speed up. At one point it needs a 1 if a number is even and a 2 if it’s odd. Workers 11 and 12 found a way to skip an instruction there. My tool checked whether any input could make their shortcut pick 2 where the original code picked 1, or the other way around. There was no such input.
 
 | What I gave the tool | Best time |
 | --- | ---: |
