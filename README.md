@@ -8,11 +8,11 @@ Could I take just those two instructions, put them in the working program, and s
 
 ## What I tried
 
-I ran my own copy of RSI-top on Anthropic’s performance take-home, the coding task the group used in their write-up. The starter program walks through a tree of numbers, updating a value at each step. The agents had to make it produce the same answers in fewer cycles on a simulated processor. I saved eight of their attempts that ran but gave the wrong answers. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
+I ran my own copy of RSI-top on Anthropic’s performance take-home, the coding task the group used in their write-up. The starter program walks through a tree of numbers, updating a value at each step. The puzzle comes with a Python simulator that acts like a processor. It runs the instructions the agents write and counts how many cycles they take. The goal was to get the same answers in fewer cycles. I saved eight of their attempts that ran but gave the wrong answers. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
 
 Workers 11 and 12 both wrote programs that gave the wrong final answer. Both got this one part right, though. The starter needed to pick A when a number was zero and B otherwise. It used two instructions. The first asked “is the number zero?” The second used that answer to pick A or B.
 
-The machine’s pick instruction already has a rule of its own. Zero picks the **second** choice. Any other number picks the **first**. So both workers fed it the original number and put **B first, A second**.
+That simulated processor has a built-in instruction for picking between two values. Zero picks the **second** choice. Any other number picks the **first**. So both workers fed it the original number and put **B first, A second**.
 
 - Give it `0` and it picks the second choice, A.
 - Give it `7` and it picks the first choice, B. The same goes for every other nonzero number.
