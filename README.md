@@ -6,11 +6,11 @@ That got me wondering about the attempts that gave a wrong answer. An agent migh
 
 ## What I tried
 
-I ran RSI-top on [Anthropic’s coding task](https://github.com/anthropics/original_performance_takehome) and saved [eight attempts](data/README.md) that got the answer wrong. I wrote a Python tool to see if any of the edits were worth keeping.
+I gave the agents [Anthropic’s working program](https://github.com/anthropics/original_performance_takehome) to speed up and saved [eight of their attempts](data/README.md) that gave wrong answers. I wrote a Python tool to look through those attempts for edits I could reuse.
 
-Anthropic gives you a working program to speed up. At one point it needs a 1 if a number is even and a 2 if it’s odd. Workers 11 and 12 found a way to skip an instruction there. My tool checked whether any input could make their shortcut pick 2 where the original code picked 1, or the other way around. There was no such input.
+Two attempts had the same shortcut. My tool verified that it did the same calculation as the original code, then used it to build a faster version of the working program. To measure the difference, I timed the best program the tool could build with and without access to the eight attempts.
 
-| What I gave the tool | Best time |
+| What I gave the tool | Time for the whole program |
 | --- | ---: |
 | The working program alone | 1,981 cycles |
 | The working program and the eight wrong attempts | 1,269 cycles |
@@ -20,7 +20,7 @@ The 1,269-cycle program passed all nine tests. To check whether that one edit ex
 <details>
 <summary>What was the shortcut?</summary>
 
-The program needed to choose A for zero and B for any other number. The original code first checked whether its input was zero, then used the answer to choose A or B. The processor in this coding task can already choose between two values based on whether a number is zero. The workers used that instruction directly. With B as its first choice and A as its second, it picks A for zero and B for everything else. Skipping the separate check also let the tool move some later instructions earlier. [The check for this edit](results/zero_test.smt2)
+Workers 11 and 12 skipped a redundant check. The original code checked whether a number was zero, then used the answer to choose between two values. The instruction that makes the choice already handles zero, so the workers could use the number directly and swap the order of the two values. Skipping the check also let the tool move some later instructions earlier. [The check for this edit](results/zero_test.smt2)
 
 </details>
 
