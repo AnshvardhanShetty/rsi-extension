@@ -1,0 +1,7 @@
+(set-logic QF_BV)
+(declare-const x (_ BitVec 32))
+(declare-const a (_ BitVec 32))
+(declare-const b (_ BitVec 32))
+(define-fun sel ((t (_ BitVec 32)) (p (_ BitVec 32)) (q (_ BitVec 32))) (_ BitVec 32) (ite (= t #x00000000) q p))
+(assert (distinct (sel (ite (= x #x00000000) #x00000001 #x00000000) a b) (sel x b a)))
+(check-sat)

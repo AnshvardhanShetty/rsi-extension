@@ -1,0 +1,237 @@
+{
+  "seeds": {
+    "51": {
+      "shared_best": {
+        "worker": 1,
+        "cycles": 2735,
+        "verification": {
+          "valid": true,
+          "cycles": 2735,
+          "official": [
+            2735,
+            2735,
+            2735,
+            2735,
+            2735,
+            2735,
+            2735,
+            2735
+          ],
+          "executable_sha256": "b3360fa10658ab566ea2b99a8bb296d1ec056596fc974c0b4bc4edc37528c328"
+        }
+      },
+      "arms": {
+        "native": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 1.28165625,
+          "best": {
+            "worker": 9,
+            "cycles": 2353,
+            "verification": {
+              "valid": true,
+              "cycles": 2353,
+              "official": [
+                2353,
+                2353,
+                2353,
+                2353,
+                2353,
+                2353,
+                2353,
+                2353
+              ],
+              "executable_sha256": "90cfdcc21ff721b0759a5a27797f02c2a174c438b8bd0b3dbff12a034f430f83"
+            }
+          }
+        },
+        "handoff": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 1.61133375,
+          "best": {
+            "worker": 9,
+            "cycles": 2352,
+            "verification": {
+              "valid": true,
+              "cycles": 2352,
+              "official": [
+                2352,
+                2352,
+                2352,
+                2352,
+                2352,
+                2352,
+                2352,
+                2352
+              ],
+              "executable_sha256": "7898daa94c4763201d20ec5c9bc2a6318d162b3e941b5099bed3897a28a09299"
+            }
+          }
+        }
+      },
+      "complete": true,
+      "gain_cycles": 1
+    },
+    "52": {
+      "shared_best": {
+        "worker": 2,
+        "cycles": 10828,
+        "verification": {
+          "valid": true,
+          "cycles": 10828,
+          "official": [
+            10828,
+            10828,
+            10828,
+            10828,
+            10828,
+            10828,
+            10828,
+            10828
+          ],
+          "executable_sha256": "bb99611629aca68da83bab6459e1d5f471d24ee3268bcd6e944b0a420bd21953"
+        }
+      },
+      "arms": {
+        "native": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 1.53417975,
+          "best": {
+            "worker": 9,
+            "cycles": 4007,
+            "verification": {
+              "valid": true,
+              "cycles": 4007,
+              "official": [
+                4007,
+                4007,
+                4007,
+                4007,
+                4007,
+                4007,
+                4007,
+                4007
+              ],
+              "executable_sha256": "86d1ead691d83246dd1ec5b76bc5f98e1c0bd11454617a63a98421f7b1bd5e1d"
+            }
+          }
+        },
+        "handoff": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 2.4096975,
+          "best": {
+            "worker": 2,
+            "cycles": 10828,
+            "verification": {
+              "valid": true,
+              "cycles": 10828,
+              "official": [
+                10828,
+                10828,
+                10828,
+                10828,
+                10828,
+                10828,
+                10828,
+                10828
+              ],
+              "executable_sha256": "bb99611629aca68da83bab6459e1d5f471d24ee3268bcd6e944b0a420bd21953"
+            }
+          }
+        }
+      },
+      "complete": true,
+      "gain_cycles": -6821
+    },
+    "53": {
+      "shared_best": {
+        "worker": 6,
+        "cycles": 3996,
+        "verification": {
+          "valid": true,
+          "cycles": 3996,
+          "official": [
+            3996,
+            3996,
+            3996,
+            3996,
+            3996,
+            3996,
+            3996,
+            3996
+          ],
+          "executable_sha256": "2bd035c3c32829e79828ab84a0084762a33d7a07fa81325408a3e08c9028a707"
+        }
+      },
+      "arms": {
+        "native": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 1.910202,
+          "best": {
+            "worker": 8,
+            "cycles": 2244,
+            "verification": {
+              "valid": true,
+              "cycles": 2244,
+              "official": [
+                2244,
+                2244,
+                2244,
+                2244,
+                2244,
+                2244,
+                2244,
+                2244
+              ],
+              "executable_sha256": "9362e006210b10cb98678b04813be83da022815a1473ade38203188a5b92f129"
+            }
+          }
+        },
+        "handoff": {
+          "complete": true,
+          "slots": 8,
+          "calls": 8,
+          "receipts": 8,
+          "usd": 2.154588,
+          "best": {
+            "worker": 13,
+            "cycles": 3484,
+            "verification": {
+              "valid": true,
+              "cycles": 3484,
+              "official": [
+                3484,
+                3484,
+                3484,
+                3484,
+                3484,
+                3484,
+                3484,
+                3484
+              ],
+              "executable_sha256": "5acef525ad31d24078bd429fff137650baa24ad1a98a7c1bffc6810a04192ba1"
+            }
+          }
+        }
+      },
+      "complete": true,
+      "gain_cycles": -1240
+    }
+  },
+  "complete_pairs": 3,
+  "advance": false
+}

@@ -1,0 +1,2574 @@
+{
+  "screen": [
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 0",
+      "result": 11884
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 0",
+      "result": "ValueError NameError: name 'n_nodes_c' is not defined. Did you mean: 'n_nodes'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 1",
+      "result": 11884
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 1",
+      "result": "ValueError NameError: name 'c1_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 2",
+      "result": "ValueError NameError: name 'idx_base_val' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 2",
+      "result": "ValueError NameError: name 'c3_c' is not defined. Did you mean: 'c1_c'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 3",
+      "result": 11885
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 3",
+      "result": "ValueError NameError: name 'c5_c' is not defined. Did you mean: 'm5_c'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 4",
+      "result": "ValueError NameError: name 'batch_groups' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 4",
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 5",
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 5",
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 6",
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 6",
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 8",
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 7",
+      "result": "ValueError NameError: name 'c5v' is not defined. Did you mean: 'm5v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 9",
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 8",
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 11",
+      "result": "ValueError NameError: name 'scalar_addr' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 9",
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 12",
+      "result": "ValueError NameError: name 'threshold' is not defined. Did you mean: 'thresh_v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 10",
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c3v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 13",
+      "result": "ValueError NameError: name 'stages' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 11",
+      "result": "ValueError NameError: name 'c5xv' is not defined. Did you mean: 'c5v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 14",
+      "result": "ValueError NameError: name 'concurrency' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 12",
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 15",
+      "result": "ValueError NameError: name 'idx_bases' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 14",
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 16",
+      "result": "wrong output"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 15",
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c3v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": "hunks 17",
+      "result": "wrong output"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": "hunks 16",
+      "result": "ValueError NameError: name 'c5xv' is not defined. Did you mean: 'c5v'?"
+    }
+  ],
+  "grouped": [
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'heapq' is not defined. Did you mean: 'help'? Or did you forget to import 'heapq'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        21
+      ],
+      "result": "ValueError NameError: name 'count' is not defined. Did you mean: 'round'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1
+      ],
+      "result": 11884
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'heapq' is not defined. Did you mean: 'help'? Or did you forget to import 'heapq'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        1,
+        18
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'link' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        1,
+        2
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined. Did you mean: 'base_group'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined. Did you mean: 'base_group'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        2,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        2,
+        3
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined. Did you mean: 'base_group'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        3,
+        7
+      ],
+      "result": 11885
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        3,
+        4
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        3,
+        12
+      ],
+      "result": "ValueError NameError: name 'n_nodes_v' is not defined. Did you mean: 'n_nodes'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        4,
+        5
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        3,
+        21
+      ],
+      "result": "ValueError NameError: name 'count' is not defined. Did you mean: 'round'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "ValueError NameError: name 'idx_base_val' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        5,
+        6
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'stages' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        6,
+        7
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        12,
+        21
+      ],
+      "result": "ValueError NameError: name 'threshold' is not defined. Did you mean: 'thresh_v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        7,
+        8
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        13,
+        20
+      ],
+      "result": "ValueError NameError: name 'stages' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        8,
+        9
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        14,
+        21
+      ],
+      "result": "ValueError NameError: name 'concurrency' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        9,
+        10
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined. Did you mean: 'scalar_vals'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        15,
+        20
+      ],
+      "result": "ValueError NameError: name 'idx_bases' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        10,
+        11
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        15,
+        21
+      ],
+      "result": "ValueError NameError: name 'idx_bases' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        11,
+        12
+      ],
+      "result": "ValueError NameError: name 'scalar_addr' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'scalars' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'mul4097_v' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        16,
+        21
+      ],
+      "result": "ValueError NameError: name 'batch_groups' is not defined. Did you mean: 'base_group'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18,
+        19,
+        20
+      ],
+      "result": "ValueError NameError: name 'idx_bases' is not defined. Did you mean: 'idx_base_s'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        12,
+        13
+      ],
+      "result": "ValueError NameError: name 'threshold' is not defined. Did you mean: 'thresh_v'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'mul4097_v' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'hash_v1' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        17,
+        21
+      ],
+      "result": "ValueError NameError: name 'count' is not defined. Did you mean: 'round'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        18,
+        19,
+        20
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        13,
+        14
+      ],
+      "result": "ValueError NameError: name 'concurrency' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'val_s' is not defined. Did you mean: 'vars'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "result": "ValueError NameError: name 'val_s' is not defined. Did you mean: 'vars'?"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        19,
+        20
+      ],
+      "result": "ValueError NameError: name 'mul4097_v' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        21
+      ],
+      "result": "ValueError NameError: name 'stages' is not defined"
+    },
+    {
+      "worker": 10,
+      "parent_cycles": 11884,
+      "change": [
+        14,
+        15
+      ],
+      "result": "ValueError NameError: name 'concurrency' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'half_c' is not defined. Did you mean: 'halfv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        8
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined. Did you mean: 'half_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1
+      ],
+      "result": "ValueError NameError: name 'n_nodes_c' is not defined. Did you mean: 'n_nodes'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'half_c' is not defined. Did you mean: 'halfv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1x_c' is not defined. Did you mean: 'c1_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        1,
+        9
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        1,
+        2
+      ],
+      "result": "ValueError NameError: name 'c1_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1x_c' is not defined. Did you mean: 'c1_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3x_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        2,
+        10
+      ],
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c3v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c2v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        2,
+        3
+      ],
+      "result": "ValueError NameError: name 'c3_c' is not defined. Did you mean: 'c1_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3x_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5x_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        3,
+        11
+      ],
+      "result": "ValueError NameError: name 'c5xv' is not defined. Did you mean: 'c5v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5v' is not defined. Did you mean: 'm5v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        3,
+        4
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined. Did you mean: 'half_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined. Did you mean: 'half_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        12,
+        17
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        18
+      ],
+      "result": "wrong output"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        4,
+        5
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined. Did you mean: 'half_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        4,
+        8,
+        12
+      ],
+      "result": "ValueError NameError: name 'half_c' is not defined. Did you mean: 'halfv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'n_nodes_c' is not defined. Did you mean: 'n_nodes'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        5,
+        6
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        5,
+        9,
+        14
+      ],
+      "result": "ValueError NameError: name 'c1x_c' is not defined. Did you mean: 'c1_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1_c' is not defined. Did you mean: 'c1x_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        6,
+        7
+      ],
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5xv' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        6,
+        10,
+        15
+      ],
+      "result": "ValueError NameError: name 'c3x_c' is not defined. Did you mean: 'c3_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3_c' is not defined. Did you mean: 'c2_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        7,
+        8
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        7,
+        11,
+        16
+      ],
+      "result": "ValueError NameError: name 'c5x_c' is not defined. Did you mean: 'c5_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5_c' is not defined. Did you mean: 'm5_c'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        8,
+        9
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'nvec' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        9,
+        10
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c2v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'halfv' is not defined"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        10,
+        11
+      ],
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c3v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c2v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5v' is not defined. Did you mean: 'm5v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        11,
+        12
+      ],
+      "result": "ValueError NameError: name 'c5xv' is not defined. Did you mean: 'c5v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c5v' is not defined. Did you mean: 'm5v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        13,
+        14
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        15,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        14,
+        15
+      ],
+      "result": "ValueError NameError: name 'c1xv' is not defined. Did you mean: 'c1v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c1v' is not defined. Did you mean: 'c1xv'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18
+      ],
+      "result": "ValueError NameError: name 'c3v' is not defined. Did you mean: 'c2v'?"
+    },
+    {
+      "worker": 21,
+      "parent_cycles": 9851,
+      "change": [
+        15,
+        16
+      ],
+      "result": "ValueError NameError: name 'c3xv' is not defined. Did you mean: 'c3v'?"
+    }
+  ]
+}
