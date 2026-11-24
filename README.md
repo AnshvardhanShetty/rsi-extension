@@ -1,32 +1,32 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. One experiment used a puzzle from Anthropic. You get a working Python function that writes instructions for a simulated processor. The challenge is to get the same answers in fewer clock cycles. [Anthropic’s puzzle](https://github.com/anthropics/original_performance_takehome)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. They gave AI agents a coding puzzle from Anthropic. The Python code already works. The goal is to make it produce instructions that finish in fewer clock cycles. [Anthropic’s puzzle](https://github.com/anthropics/original_performance_takehome)
 
-The group had AI agents edit the function and test each version. When progress stalled, four planners looked back through earlier attempts and suggested what the workers should try next. [RSI-top write-up](https://rsi-top.github.io/)
+The workers edit the code and test each version. When they get stuck, four planners look through earlier attempts and suggest what to try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-I ran their search on the same puzzle and came away with two questions.
+I tried the same puzzle with two questions in mind.
 
-- One worker had sped up its program by changing which instructions ran together. Could a small Python compiler do that automatically?
-- Some programs ran all the way through and gave the wrong answer. Could the compiler pick out a step one of those workers did well and reuse it in a working program?
+- One worker sped up a program by changing which instructions ran together. Could a small compiler do that too?
+- A worker can speed up one step and break something else. Could the compiler keep the useful step from a program that gave the wrong answer?
 
-## My RSI-top run
+## RSI-top run
 
-- I used a saved run where the workers tried edits on their own. Their fastest correct program took **4,007 cycles**.
-- I kept five programs that ran but failed the tests. [Saved programs](data/README.md)
+- Used a saved run where the workers tried edits on their own.
+- The fastest correct program took **4,007 cycles**. Five other programs ran but gave wrong answers. [Saved programs](data/README.md)
 
-## My compiler
+## Compiler
 
-- In the earlier scheduling example, I took the program the worker started from and wrote a Python script to group instructions together. That alone got close to the agent’s speedup.
-- I added a few rules for the processor. For example, it can multiply two numbers and add a third in one instruction. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
-- I gave the compiler Anthropic’s original program on its own. It tried 90 settings for arranging the instructions. Its best program took **1,981 cycles**.
+- A short Python script grouped instructions that could run at the same time. On the earlier worker’s starting program, that nearly matched its speedup.
+- That script grew into a small compiler. It also looks for steps the processor can combine, like a multiply and an add in one instruction. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
+- Given only Anthropic’s original program, it tried 90 ways to arrange the work. The fastest took **1,981 cycles**.
 
-## Borrowing a shortcut
+## Shortcut from a failed attempt
 
-- I gave the same compiler the five wrong programs to see if any had a shortcut it had missed.
-- Two did. Workers 11 and 12 both skipped a check for zero. The next instruction could already choose between two values based on whether the number was zero.
-- They swapped the two choices and saved an instruction. I checked that it still picked the right value for every possible input to that step. [The check](results/zero_test.smt2)
-- Same 90 settings as before. This time the compiler got **1,269 cycles** and passed all nine tests.
-- I tried giving it just that one shortcut by hand. It built the exact same program.
+- Gave the compiler the same original program and the five failed attempts.
+- Workers 11 and 12 had both skipped a step. The original checked for zero before choosing a value. The choice instruction already handled zero.
+- The workers swapped the two choices and dropped the extra check. The compiler verified that both versions always picked the same value. [The check](results/zero_test.smt2)
+- With the same 90 settings, the rebuilt program took **1,269 cycles** and passed all nine tests.
+- Giving the compiler just that shortcut by hand produced the same program.
 
 ## Run it
 
