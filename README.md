@@ -1,11 +1,11 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. Agents try to speed up code. When they get stuck, planners look back and suggest what to try next. [Write-up](https://rsi-top.github.io/)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents edit a working program to make it faster. When progress stalled, four planners looked back at earlier attempts and suggested what the agents should try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-Two questions I had
+I ran their search on the same puzzle to try two ideas.
 
-- Could a Python compiler speed up the original program on its own?
-- Could it borrow one good calculation from an agent’s wrong answer?
+- One agent sped up a program by changing which instructions ran together. Could I write a small Python compiler to do that automatically?
+- What can we learn from a program that gives the wrong answer? Maybe the agent found a shortcut and broke something else. Could I check the shortcut and use it in a working program?
 
 ## My RSI-top run
 
