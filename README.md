@@ -13,12 +13,12 @@ I thought that was really cool, especially the idea of going back through old at
 
 - In an earlier run, a worker sped up a program by grouping instructions. The processor could do two things in the same clock cycle instead of doing one and then the other.
 - I tried that on the program the worker had started from. A short Python script grouped the instructions automatically and got close to the worker’s speedup.
-- That script grew into a small compiler. It also looks for steps the processor can combine, like a multiply and an add in one instruction. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
+- I developed that script into a small compiler. It looks for steps the processor can combine, like a multiply and an add in one instruction. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
 - Given only Anthropic’s original program, it tried 90 ways to arrange the work. The fastest took **1,981 cycles**.
 
 ## Shortcut from a failed attempt
 
-- I went back to the five failed attempts. Had any worker found a quicker way to do one calculation, even if the whole program was wrong? I gave the compiler those attempts to check against the original.
+- I was curious to see if there was anything we could learn from the five failed attempts. Had any worker found a quicker way to do one calculation, even if the final output was wrong? I gave the compiler those attempts to check against the original.
 - Workers 11 and 12 had both skipped a step. The original checked for zero before choosing a value. The choice instruction already handled zero.
 - The workers swapped the two choices and dropped the extra check. The compiler verified that both versions always picked the same value. [The check](results/zero_test.smt2)
 - The compiler rebuilt the original program with the shortcut from workers 11 and 12. With the same 90 settings, its best version took **1,269 cycles** and passed all nine tests.
