@@ -4,7 +4,7 @@ I read the RSI-top write-up from Azalia Mirhoseini’s group. They gave AI agent
 
 The workers edit the code and test each version. When they get stuck, four planners look through earlier attempts and suggest what to try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-I ran the workers on the same puzzle and saved their attempts. The scores told me which programs were faster. To see where the speedups came from, I looked at the instructions before and after a worker’s edit. I kept the attempts that failed, too. A wrong final answer didn’t tell me which part had gone wrong.
+I tried the same puzzle and saved the code from each attempt. I wanted to see what the faster workers had changed, and whether the ones that got a wrong answer had found anything worth keeping.
 
 ## RSI-top run
 
