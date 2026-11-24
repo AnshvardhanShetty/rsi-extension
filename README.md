@@ -6,7 +6,9 @@
 
 ## A small compiler for the same task
 
-- I wanted to see how fast I could make Anthropic’s original program with a few rules of my own. I wrote a compiler in Python that reads the original instructions, follows the calculations, and writes a shorter instruction list for the processor.
+- The idea came from an earlier RSI-top run. One agent made a working program much faster even though it still did the same calculations. The big change was which instructions ran together.
+- I tried a small Python script that grouped instructions the processor could run in the same cycle. On that program it recovered almost all of the agent’s speedup. That made me wonder how much of this work I could do automatically.
+- I built that idea into a small compiler for the puzzle. Give it the original working instructions and it figures out which operations can be combined and which can run at the same time.
 - One rule looks for a multiply followed by an add. This processor can do both in one instruction. [Arithmetic rules](compiler/rewrite_rules.py)
 - The compiler also decides what can run together. While the processor loads a number from memory, it can add two numbers it already has. An addition that needs the number being loaded has to wait. [Scheduling code](compiler/schedule_instructions.py)
 - I gave the compiler just Anthropic’s original program. It tried 90 settings for loading values and arranging the instructions. The fastest correct program it built took **1,981 cycles**.
