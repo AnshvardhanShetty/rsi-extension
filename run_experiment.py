@@ -110,7 +110,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seed", type=int, choices=(52, 54), default=52)
     parser.add_argument("--benchmark", type=Path, default=Path("benchmark"))
+    parser.add_argument("--compare-search", action="store_true", help="Replay the ordinary seed-52 search result and the offline extension.")
     args = parser.parse_args()
+    if args.compare_search and args.seed != 52:
+        parser.error("--compare-search uses the saved seed-52 search")
     simulator_path = args.benchmark / "tests/frozen_problem.py"
     if (
         not simulator_path.is_file()
@@ -123,16 +126,23 @@ def main():
     import frozen_problem as simulator
 
     folder = DATA / f"seed{args.seed}"
-    workers = sorted(
-        path for path in folder.glob("*.json.gz") if path.name != "starter.json.gz"
-    )
-    expected_workers = 8 if args.seed == 52 else 4
+    pattern = "native_*.json.gz" if args.compare_search else "*.json.gz"
+    workers = sorted(path for path in folder.glob(pattern) if path.name != "starter.json.gz")
+    expected_workers = {52: 8, 54: 4}[args.seed]
+    if args.compare_search:
+        expected_workers = 5
     if len(workers) != expected_workers:
         raise ValueError(
             f"Expected {expected_workers} programs that returned wrong answers in {folder}"
         )
 
-    if args.seed == 52:
+    if args.compare_search:
+        first_tree = 410032
+        ordinary = read_instructions(DATA / "seed52_search_best.json.gz")
+        verify_program(simulator, ordinary, first_tree)
+        print(f"Ordinary search: {len(ordinary):,} cycles (saved program, 8 trees passed)", flush=True)
+        cases = [("failed_workers", "Same search + offline recovery", workers, False)]
+    elif args.seed == 52:
         cases = [
             ("baseline", "baseline", [], False),
             (

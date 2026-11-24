@@ -8,11 +8,15 @@ I wondered about the versions that failed the tests. An agent might have found a
 
 ## What I tried
 
-1. I ran my own RSI-top search and saved the instructions from eight versions that gave wrong answers. This is where the agents’ part of the experiment ended. [The eight attempts](data/README.md)
-2. I wrote a Python compiler that reads the instructions from the working program, works out what they calculate, and writes a new set of instructions for the same job. It has a few rules of its own. For example, it can group eight inputs together so one instruction does the same arithmetic on all eight. Using only the working program, it produced a version that took **1,981 cycles**.
-3. I then let the same compiler read the eight saved attempts too. In the instructions from workers 11 and 12, it found a shorter way to do one of the calculations. It verified that the shortcut gave the same result as the original calculation.
-4. The compiler could now use that shortcut when building the working program. With the same settings as before, the program it produced took **1,269 cycles** and passed all nine benchmark tests.
-5. I wanted to know whether that one shortcut explained the difference. I took the eight attempts away and gave the tool just the original program and the shortcut by hand. It built the exact same 1,269-cycle program.
+1. I ran the ordinary OpenEvolve search from RSI-top on Anthropic’s task. On seed 52, its fastest correct program came from worker 9. I saved that program and five attempts from the same search that gave wrong answers.
+2. After the search finished, I ran my Python tool on the original working code and those five attempts. Workers 11 and 12 had a shortcut that computed the same value in fewer instructions. The tool verified the shortcut and used it to build a new program.
+
+| Seed 52, same agent attempts | Best verified time |
+| --- | ---: |
+| RSI-top ordinary search | 4,007 cycles |
+| Same search + offline recovery from its failed attempts | 1,269 cycles |
+
+That’s about **68% fewer cycles** on this run. The recovery step used extra local computation and made no further model calls. The resulting program passed all nine benchmark tests.
 
 <details>
 <summary>What was the shortcut?</summary>
@@ -28,10 +32,17 @@ You'll need Python 3.10+ and Z3 (`brew install z3` on macOS or `sudo apt install
 ```sh
 git clone https://github.com/anthropics/original_performance_takehome.git benchmark
 git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
-python3 run_experiment.py  # replay the seed 52 example
+python3 run_experiment.py --compare-search
 ```
 
-You should see 1,981 cycles for the working program alone, 1,269 with the eight attempts, and 1,269 with just the shortcut added by hand. Each run tries the same 90 ways of arranging the instructions and checks the answers on eight fresh trees. To follow the code, start with `collect_expressions` in [run_experiment.py](run_experiment.py). The part that checks whether two calculations agree is in [prove_equivalence.py](compiler/prove_equivalence.py).
+This checks the saved 4,007-cycle program on eight fresh trees, rebuilds the 1,269-cycle program from the five ordinary-search attempts, and checks it on the same trees. [Experiment code](run_experiment.py) · [Saved inputs](data/README.md)
+
+<details>
+<summary>How much did borrowing the shortcut help?</summary>
+
+The tool also has its own compiler optimizations. With the original working code alone, it reached 1,981 cycles. Giving it just the recovered shortcut by hand reproduced the same 1,269-cycle program. Run `python3 run_experiment.py` for the original checks, including the replay with all eight saved attempts from the two branches.
+
+</details>
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
