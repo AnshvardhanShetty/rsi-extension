@@ -9,8 +9,8 @@ I ran their search on the same puzzle to try two ideas.
 
 ## My RSI-top run
 
-- I ran RSI-top’s agents without the planners. Their job was to make Anthropic’s program finish in fewer clock cycles while keeping its answers correct. [The puzzle](https://github.com/anthropics/original_performance_takehome)
-- Their fastest correct program took **4,007 cycles**. I also saved five attempts that gave wrong answers.
+- I already had a saved run where RSI-top’s workers tried edits on their own. Their fastest correct program took **4,007 cycles**. [The puzzle](https://github.com/anthropics/original_performance_takehome)
+- Five attempts gave wrong answers. I could use those saved programs to test my compiler without running the agents again.
 
 ## My compiler
 
