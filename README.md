@@ -6,6 +6,8 @@ The workers edit the code and test each version. When they get stuck, four plann
 
 When I ran the workers on the same puzzle, I kept the code from each attempt so I could see how they’d sped things up and whether there was anything I could use from the programs that got the answer wrong.
 
+Below is a walkthrough of the run, how I built the compiler, and the shortcut it found in two programs that failed.
+
 ## RSI-top run
 
 - The workers tried edits on their own. Their fastest correct program took **4,007 cycles**.
