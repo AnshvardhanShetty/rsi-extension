@@ -21,7 +21,7 @@ I thought that was really cool, especially the idea of going back through old at
 - I went back to the five failed attempts. Had any worker found a quicker way to do one calculation, even if the whole program was wrong? I gave the compiler those attempts to check against the original.
 - Workers 11 and 12 had both skipped a step. The original checked for zero before choosing a value. The choice instruction already handled zero.
 - The workers swapped the two choices and dropped the extra check. The compiler verified that both versions always picked the same value. [The check](results/zero_test.smt2)
-- With the same 90 settings, the rebuilt program took **1,269 cycles** and passed all nine tests.
+- The compiler rebuilt the original program with the shortcut from workers 11 and 12. With the same 90 settings, its best version took **1,269 cycles** and passed all nine tests.
 - Giving the compiler just that shortcut by hand produced the same program.
 
 ## Run it
