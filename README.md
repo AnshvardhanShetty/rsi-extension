@@ -9,9 +9,8 @@ I ran their search on the same puzzle to try two ideas.
 
 ## My RSI-top run
 
-- The puzzle comes from Anthropic. You’re given Python code that writes instructions for a simulated processor. The goal is to get the right answers in fewer clock cycles. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
-- RSI-top uses a search tool called OpenEvolve. An agent edits a program, the evaluator checks and times it, and later agents can build on earlier versions. In the group’s experiment, ordinary search reached 1,244 cycles. Adding planners brought it to 1,109. [Their code](https://github.com/RSI-top/rsi-top-wrapper)
-- For my run I used their ordinary search on the same puzzle. The fastest correct program the agents wrote took **4,007 cycles** (seed 52). I saved their attempts and ran my compiler afterward.
+- I ran RSI-top’s agents without the planners. Their job was to make Anthropic’s program finish in fewer clock cycles while keeping its answers correct. [The puzzle](https://github.com/anthropics/original_performance_takehome)
+- Their fastest correct program took **4,007 cycles**. I also saved five attempts that gave wrong answers.
 
 ## My compiler
 
