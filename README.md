@@ -1,33 +1,39 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents edit a working program to make it faster. When progress stalled, four planners looked back at earlier attempts and suggested what the agents should try next. [RSI-top write-up](https://rsi-top.github.io/)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. Agents try to speed up code. When they get stuck, planners look back and suggest what to try next. [Write-up](https://rsi-top.github.io/)
 
-I ran their search on the same puzzle to try two ideas.
+Two questions I had
 
-- One agent sped up a program by changing which instructions ran together. Could I write a small Python compiler to do that automatically?
-- Another agent’s program gave the wrong answer overall. What if it still did one calculation faster? Could my compiler check that part and borrow it for a working program?
+- Could a Python compiler speed up the original program on its own?
+- Could it borrow one good calculation from an agent’s wrong answer?
 
 ## My RSI-top run
 
-- I already had a saved run where RSI-top’s workers tried edits on their own. Their fastest correct program took **4,007 cycles**. [The puzzle](https://github.com/anthropics/original_performance_takehome)
-- Five attempts gave wrong answers. I could use those saved programs to test my compiler without running the agents again.
+- Used a saved run on Anthropic’s puzzle. Fewer clock cycles means faster code. [Puzzle](https://github.com/anthropics/original_performance_takehome)
+- Workers tried edits on their own. Fastest correct program took **4,007 cycles**.
+- Five attempts gave wrong answers. Kept all five. [Saved programs](data/README.md)
 
 ## My compiler
 
-- In an earlier run, an agent had sped up a program mostly by changing which instructions ran together. A small Python script almost matched that speedup just by grouping instructions. That gave me the idea for the compiler.
-- My compiler reads the working program and looks for things the processor can do in one cycle. It can combine a multiply and an add, or do arithmetic while it waits for a different value to load. [Arithmetic rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
-- I gave it Anthropic’s original program alone. It tried 90 settings for arranging the work. The fastest program it built took **1,981 cycles**.
+- An earlier agent sped things up by running instructions together.
+- A small Python script almost matched that speedup. That gave me the idea.
+- Built a compiler to group work automatically and combine steps like multiply and add. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
+- Original program alone. Tried 90 settings and got **1,981 cycles**.
 
 ## Borrowing a shortcut
 
-- Five programs from my RSI-top run gave wrong answers. I wondered if one had a good shortcut buried in it. I used these saved attempts to build and test a way for the compiler to borrow one calculation at a time. [Saved attempts](data/README.md)
-- Workers 11 and 12 had found the same shortcut. The original program checked “is this number zero?” before choosing between two values. The choice instruction could already handle zero. The workers swapped the two choices and dropped the extra check.
-- The compiler verified that both versions always picked the same value. With the shorter version, it could also load some values earlier. [The check](results/zero_test.smt2)
-- Same original program, same 90 settings. With the failed attempts to borrow from, the compiler got to **1,269 cycles** and passed all nine tests. Giving it just that one shortcut by hand produced the exact same program.
+- Workers 11 and 12 found the same shortcut in programs that failed.
+- Original code used two steps. Check for zero, then choose a value.
+- Workers swapped the two choices and skipped the check. The choice instruction already handles zero.
+- Verified both versions always pick the same value. [Proof](results/zero_test.smt2)
+- Added the five saved attempts. Same 90 settings. **1,269 cycles**, all nine tests passed.
+- Added just that shortcut by hand as a check. Got the same program.
 
 ## Run it
 
-Use Python 3.10+ and Z3. Install Z3 with `brew install z3` on macOS or `sudo apt install z3` on Ubuntu. Run from the repo root. No API key needed.
+- Python 3.10+ and Z3. No API key.
+- Install Z3 with `brew install z3` (macOS) or `sudo apt install z3` (Ubuntu).
+- Run from the repo root.
 
 ```sh
 git clone https://github.com/anthropics/original_performance_takehome.git benchmark
@@ -35,8 +41,8 @@ git -C benchmark checkout 5452f74bd977807ac2e74f3d29432b9df6f25197
 python3 run_experiment.py --compare-search
 ```
 
-- `--compare-search` checks the saved agent program (4,007 cycles) and rebuilds the program using the five failed attempts (1,269 cycles). It checks both on eight fresh inputs.
-- Run `python3 run_experiment.py` for the compiler alone (1,981 cycles), the handwritten shortcut check, and a replay with eight attempts from two search branches. [Experiment code](run_experiment.py)
+- `--compare-search` checks the 4,007- and 1,269-cycle programs on eight fresh inputs.
+- `python3 run_experiment.py` reproduces the 1,981-cycle result and the handwritten shortcut check. [Experiment code](run_experiment.py)
 
 <details>
 <summary>Run Anthropic’s nine tests</summary>
@@ -48,6 +54,6 @@ python3 benchmark/tests/submission_tests.py
 git -C benchmark diff HEAD -- tests/ problem.py
 ```
 
-Expect nine tests to pass and the last command to print nothing.
+- Expected output is nine passing tests and an empty git diff.
 
 </details>
