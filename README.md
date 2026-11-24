@@ -1,10 +1,14 @@
 # RSI extension
 
-## Ordinary RSI-top search · 4,007 cycles in my run
+I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents edit a working program to make it faster. When progress stalled, four planners looked back at earlier attempts and suggested what the agents should try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-- I read the RSI-top write-up from Azalia Mirhoseini’s group. They gave agents a working program for a simulated processor. The goal was to get the same answers in fewer clock cycles. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
-- When progress stalled, four planners looked through earlier attempts and suggested what to try. The group got from 1,244 cycles with ordinary search to 1,109 with planners. [Write-up](https://rsi-top.github.io/) · [Code](https://github.com/RSI-top/rsi-top-wrapper)
-- I ran ordinary search on the same puzzle. My fastest correct program took **4,007 cycles** (seed 52).
+I wanted to try this on the same puzzle and see what I could speed up with a small Python compiler of my own. This repo has the compiler and the programs I saved from my run.
+
+## What I ran from RSI-top
+
+- The puzzle comes from Anthropic. You’re given Python code that writes instructions for a simulated processor. The goal is to get the right answers in fewer clock cycles. [Anthropic’s task](https://github.com/anthropics/original_performance_takehome)
+- RSI-top uses a search tool called OpenEvolve. An agent edits a program, the evaluator checks and times it, and later agents can build on earlier versions. In the group’s experiment, ordinary search reached 1,244 cycles. Adding planners brought it to 1,109. [Their code](https://github.com/RSI-top/rsi-top-wrapper)
+- For my run I used their ordinary search on the same puzzle. The fastest correct program the agents wrote took **4,007 cycles** (seed 52). I saved their attempts and ran my compiler afterward.
 
 ## My compiler on the original program · 1,981 cycles
 
