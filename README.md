@@ -9,14 +9,14 @@ I wondered about the versions that failed the tests. An agent might have found a
 ## What I tried
 
 1. I ran the ordinary OpenEvolve search from RSI-top on Anthropic’s task. On seed 52, its fastest correct program came from worker 9. I saved that program and five attempts from the same search that gave wrong answers.
-2. After the search finished, I ran my Python tool on the original working code and those five attempts. Workers 11 and 12 had a shortcut that computed the same value in fewer instructions. The tool verified the shortcut and used it to build a new program.
+2. My extension is a compiler I wrote in Python. After the search finished, I gave it the original working code and those five attempts. It found a shorter calculation in the code from workers 11 and 12, checked that it gave the same value, and used it when rebuilding the working program. The compiler also arranged the instructions so independent operations could run together.
 
 | Seed 52, same agent attempts | Best verified time |
 | --- | ---: |
 | RSI-top ordinary search | 4,007 cycles |
-| Same search + offline recovery from its failed attempts | 1,269 cycles |
+| Same search, then my compiler using its failed attempts | 1,269 cycles |
 
-That’s about **68% fewer cycles** on this run. The recovery step used extra local computation and made no further model calls. The resulting program passed all nine benchmark tests.
+That’s about **68% fewer cycles** on this run. The agents had already finished when the compiler ran. It used extra local computation, made no further model calls, and produced a program that passed all nine benchmark tests.
 
 <details>
 <summary>What was the shortcut?</summary>
