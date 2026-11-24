@@ -8,22 +8,25 @@ I wondered about the versions that failed the tests. An agent might have found a
 
 ## What I tried
 
-1. I ran the ordinary OpenEvolve search from RSI-top on Anthropic’s task. On seed 52, its fastest correct program came from worker 9. I saved that program and five attempts from the same search that gave wrong answers.
-2. My extension is a compiler I wrote in Python. After the search finished, I gave it the original working code and those five attempts. It found a shorter calculation in the code from workers 11 and 12, checked that it gave the same value, and used it when rebuilding the working program. The compiler also arranged the instructions so independent operations could run together.
+I ran RSI-top’s ordinary search on the same task. On seed 52, the agents’ fastest correct program took **4,007 cycles**. I also saved five attempts from that run that finished but gave wrong answers.
 
-| Seed 52, same agent attempts | Best verified time |
-| --- | ---: |
-| RSI-top ordinary search | 4,007 cycles |
-| Same search, then my compiler using its failed attempts | 1,269 cycles |
+### What does the compiler do on its own?
 
-That’s about **68% fewer cycles** on this run. The agents had already finished when the compiler ran. It used extra local computation, made no further model calls, and produced a program that passed all nine benchmark tests.
+I wanted to be able to take one good idea from a wrong program and try it in a working one. For that, I wrote a small compiler in Python. I give it the instructions from Anthropic’s original working program. It follows the calculations that produce the answer and writes a new set of instructions to do them.
 
-<details>
-<summary>What was the shortcut?</summary>
+Even with just the original program, it has a few ways to save time. For example, if the code multiplies two numbers and then adds a third, the processor has one instruction that can do both. I wrote a rule so the compiler can use it. The compiler also works out which calculations have to wait for others. If an addition needs a number from memory, it has to wait for that number. An addition using numbers that are already available can run in the same cycle as the load. [Arithmetic rules](compiler/rewrite_rules.py) · [How the compiler schedules instructions](compiler/schedule_instructions.py)
 
-Workers 11 and 12 skipped a redundant check. The original code checked whether a number was zero, then used the answer to choose between two values. The instruction that makes the choice already handles zero, so the workers could use the number directly and swap the order of the two values. Skipping the check also let the tool move some later instructions earlier. [The check for this edit](results/zero_test.smt2)
+I first ran the compiler with **only the original working program**. It tried 90 combinations of settings for how to load values and arrange the work. The fastest correct program it built took **1,981 cycles**. That gave me something to compare against. How much faster could the same compiler get if it could also borrow an idea from an agent?
 
-</details>
+### What did the failed attempts add?
+
+I gave the compiler the same working program and the same 90 settings, plus the five failed attempts. Workers 11 and 12 had each found a shorter way to choose between two values. The original used one instruction to ask “is this number zero?” and another to make the choice. The choice instruction already handles zero, so the workers could give it the number directly and swap the order of the two values.
+
+The compiler checked that both versions always picked the same value, then used the shorter version when it rebuilt the program. That also let it load some values earlier. The result took **1,269 cycles** and passed all nine benchmark tests. As a check, I gave the compiler just that one rule by hand. It produced the exact same program. These were local runs on saved code after the agents had finished. [The check for this edit](results/zero_test.smt2)
+
+### Did it help the next agent?
+
+I went back to the point just after worker 11 failed and gave ordinary RSI-top four more attempts. In a second copy of the same search, I gave the workers four attempts and a note explaining the verified shortcut. Both started with a best program of 10,828 cycles. On their third try, both found the same fix for a different bug and produced the same **2,521-cycle** program. That was the best either branch got. The shortcut helped my compiler on this run. Telling the agents about it didn’t improve their final score.
 
 ## Try it
 
@@ -37,12 +40,7 @@ python3 run_experiment.py --compare-search
 
 This checks the saved 4,007-cycle program on eight fresh trees, rebuilds the 1,269-cycle program from the five ordinary-search attempts, and checks it on the same trees. [Experiment code](run_experiment.py) · [Saved inputs](data/README.md)
 
-<details>
-<summary>How much did borrowing the shortcut help?</summary>
-
-The tool also has its own compiler optimizations. With the original working code alone, it reached 1,981 cycles. Giving it just the recovered shortcut by hand reproduced the same 1,269-cycle program. Run `python3 run_experiment.py` for the original checks, including the replay with all eight saved attempts from the two branches.
-
-</details>
+To reproduce the 1,981-cycle run and the check with the handwritten rule, run `python3 run_experiment.py`. That command also tries all eight saved attempts from the two search branches.
 
 To run Anthropic’s own tests on the program you just built, copy it into the benchmark checkout and run:
 
