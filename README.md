@@ -2,7 +2,10 @@
 
 I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents edit a working program to make it faster. When progress stalled, four planners looked back at earlier attempts and suggested what the agents should try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-I wanted to try this on the same puzzle and see what I could speed up with a small Python compiler of my own. This repo has the compiler and the programs I saved from my run.
+I ran their search on the same puzzle to try two ideas.
+
+- One agent sped up a program by changing which instructions ran together. Could I write a small Python compiler to do that automatically?
+- Another agent’s program gave the wrong answer overall. What if it still did one calculation faster? Could my compiler check that part and borrow it for a working program?
 
 ## My RSI-top run
 
