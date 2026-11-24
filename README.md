@@ -1,21 +1,26 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. They had AI agents edit a working program to make it faster. When progress stalled, four planners looked back at earlier attempts and suggested what the agents should try next. [RSI-top write-up](https://rsi-top.github.io/)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. One experiment used a puzzle from Anthropic. You get a working Python function that writes instructions for a simulated processor. The challenge is to get the same answers in fewer clock cycles. [Anthropic’s puzzle](https://github.com/anthropics/original_performance_takehome)
 
-I tried the same puzzle. In one run, an agent made its program faster mostly by changing which instructions ran together. That got me writing a small compiler to try the same thing. Then I got curious about the programs that failed. If an agent got one step right and messed up the next one, could I still use the good bit?
+The group had AI agents edit the function and test each version. When progress stalled, four planners looked back through earlier attempts and suggested what the workers should try next. [RSI-top write-up](https://rsi-top.github.io/)
+
+I ran their search on the same puzzle and came away with two questions.
+
+- One worker had sped up its program by changing which instructions ran together. Could a small Python compiler do that automatically?
+- Some programs ran all the way through and gave the wrong answer. Could the compiler pick out a step one of those workers did well and reuse it in a working program?
 
 ## My RSI-top run
 
-- The agents were trying to finish Anthropic’s puzzle in fewer clock cycles. The fastest correct program in my saved run took **4,007 cycles**. [Puzzle](https://github.com/anthropics/original_performance_takehome)
-- Five other programs ran but gave wrong answers. I kept those too. [Saved programs](data/README.md)
+- I used a saved run where the workers tried edits on their own. Their fastest correct program took **4,007 cycles**.
+- I kept five programs that ran but failed the tests. [Saved programs](data/README.md)
 
 ## My compiler
 
-- I took the program that agent had started from and wrote a Python script to group instructions together. That alone got close to the agent’s speedup.
+- In the earlier scheduling example, I took the program the worker started from and wrote a Python script to group instructions together. That alone got close to the agent’s speedup.
 - I added a few rules for the processor. For example, it can multiply two numbers and add a third in one instruction. [Rules](compiler/rewrite_rules.py) · [Scheduling code](compiler/schedule_instructions.py)
 - I gave the compiler Anthropic’s original program on its own. It tried 90 settings for arranging the instructions. Its best program took **1,981 cycles**.
 
-## Back to the failed attempts
+## Borrowing a shortcut
 
 - I gave the same compiler the five wrong programs to see if any had a shortcut it had missed.
 - Two did. Workers 11 and 12 both skipped a check for zero. The next instruction could already choose between two values based on whether the number was zero.
