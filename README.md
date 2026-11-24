@@ -1,16 +1,12 @@
 # RSI extension
 
-I read the RSI-top write-up from Azalia Mirhoseini’s group. They gave AI agents a coding puzzle from Anthropic. The Python code already works. The goal is to make it produce instructions that finish in fewer clock cycles. [Anthropic’s puzzle](https://github.com/anthropics/original_performance_takehome)
+I read the RSI-top write-up from Azalia Mirhoseini’s group. In one experiment, they had AI agents try to make a working program faster. When the agents got stuck, planners went back through earlier attempts and suggested what to try next. [RSI-top write-up](https://rsi-top.github.io/)
 
-The workers edit the code and test each version. When they get stuck, four planners look through earlier attempts and suggest what to try next. [RSI-top write-up](https://rsi-top.github.io/)
-
-When I ran the workers on the same puzzle, I kept the code from each attempt so I could see how they’d sped things up and whether there was anything I could use from the programs that got the answer wrong.
-
-Below is a walkthrough of the run, how I built the compiler, and the shortcut it found in two programs that failed.
+I thought that was really cool, especially the idea of going back through old attempts. I tried a few things on top of their work using the same puzzle. The notes below cover what I built and how it turned out.
 
 ## RSI-top run
 
-- The workers tried edits on their own. Their fastest correct program took **4,007 cycles**.
+- The workers tried edits on their own on Anthropic’s coding puzzle. Their fastest correct program took **4,007 cycles**. [The puzzle](https://github.com/anthropics/original_performance_takehome)
 - Five other programs ran but gave wrong answers. [Saved programs](data/README.md)
 
 ## Compiler
